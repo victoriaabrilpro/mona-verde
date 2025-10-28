@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services d'Événements - Mona Verde</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #4E5A48;
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: stretch;
+        }
+
+        .service-card {
+            background: #ffffff;
+            border: 2px solid #4E5A48;
+            border-radius: 0;
+            padding: 3rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 280px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(247, 149, 72, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(78, 90, 72, 0.15);
+            border-color: #F79548;
+        }
+
+        .service-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4E5A48;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-description {
+            font-size: 1.1rem;
+            color: #4E5A48;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: #F79548;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background: #4E5A48;
+            transform: scale(1.1);
+        }
+
+        .service-icon::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        /* Icons spécifiques */
+        .corporate-icon::after {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z'/%3E%3C/svg%3E") no-repeat center;
+            background-size: 20px;
+        }
+
+        .celebrations-icon::after {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E") no-repeat center;
+            background-size: 20px;
+        }
+
+        .special-events-icon::after {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z'/%3E%3C/svg%3E") no-repeat center;
+            background-size: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .service-card {
+                padding: 2.5rem 1.5rem;
+                min-height: 250px;
+            }
+
+            .service-title {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .service-description {
+                font-size: 1rem;
+                max-width: 100%;
+            }
+
+            .service-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-card {
+                padding: 2rem 1rem;
+                min-height: 220px;
+            }
+
+            .service-title {
+                font-size: 1.5rem;
+            }
+
+            .service-description {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Animation d'entrée */
+        .service-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .service-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .service-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .service-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Titre principal */
+        .main-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4E5A48;
+            margin-bottom: 3rem;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Nos Services d'Événements</h1>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon corporate-icon"></div>
+                <h2 class="service-title">Corporate</h2>
+                <p class="service-description">
+                    Professional gatherings, business dinners, and networking events with panoramic city views.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon celebrations-icon"></div>
+                <h2 class="service-title">Celebrations</h2>
+                <p class="service-description">
+                    Birthday parties, anniversaries, and milestone celebrations in our exclusive rooftop setting.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon special-events-icon"></div>
+                <h2 class="service-title">Special Events</h2>
+                <p class="service-description">
+                    Themed dinners, wine tastings, and exclusive culinary experiences with our chef.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

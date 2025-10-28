@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 15s linear infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4E5A48;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a6652;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  color: #4E5A48;
+  background-color: #FFFFFF;
+}
+
+.font-colfax-regular {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+}
+
+.font-colfax-medium {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+}
+
+.font-canela {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.font-pp-haton {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+button:focus,
+a:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .animate-scroll {
+    animation-duration: 8s;
+  }
+}
+
+.motion-safe\:animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.backdrop-blur-custom {
+  backdrop-filter: blur(10px);
+}
+p, .text-justify {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.text-center p {
+  text-align: center;
+}
+
+button p,
+.no-justify p,
+nav p,
+header p,
+footer .text-center p {
+  text-align: inherit;
+}
+.pattern-luxury {
+  background-image: 
+    linear-gradient(30deg, transparent 65%, rgba(247, 149, 72, 0.04) 65%, rgba(247, 149, 72, 0.04) 70%, transparent 70%),
+    linear-gradient(90deg, transparent 65%, rgba(255, 255, 255, 0.03) 65%, rgba(255, 255, 255, 0.03) 70%, transparent 70%),
+    linear-gradient(150deg, transparent 65%, rgba(247, 149, 72, 0.04) 65%, rgba(247, 149, 72, 0.04) 70%, transparent 70%),
+    linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.02) 48%, rgba(255, 255, 255, 0.02) 52%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(247, 149, 72, 0.02) 48%, rgba(247, 149, 72, 0.02) 52%, transparent 52%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 80px,
+      rgba(255, 255, 255, 0.015) 80px,
+      rgba(255, 255, 255, 0.015) 81px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(255, 255, 255, 0.015) 80px,
+      rgba(255, 255, 255, 0.015) 81px
+    );
+  background-size: 
+    120px 208px, 120px 208px, 120px 208px,
+    60px 60px, 60px 60px,
+    80px 80px, 80px 80px;
+  background-position: 
+    0 0, 60px 104px, 0 0,
+    0 0, 30px 30px,
+    0 0, 0 0;
+}

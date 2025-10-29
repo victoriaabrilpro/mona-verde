@@ -1,0 +1,81 @@
+import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+export const client = createClient({
+  projectId: 'k070j43o',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+})
+
+const builder = imageUrlBuilder(client)
+
+export function urlFor(source: any) {
+  return builder.image(source)
+}
+
+// Sanity queries
+export const queries = {
+  partners: `*[_type == "partner"] | order(order asc) {
+    _id,
+    name,
+    logo,
+    order
+  }`,
+  
+  heroSection: `*[_type == "heroSection"][0] {
+    images,
+    tagline
+  }`,
+  
+  contactInfo: `*[_type == "contactInfo"][0] {
+    phone,
+    bookingEmail,
+    eventsEmail,
+    jobsEmail,
+    address,
+    hours,
+    socialMedia
+  }`,
+  
+  eventsPage: `*[_type == "eventsPage"][0] {
+  _id,
+  pageTitle,
+  events[] {
+    _key,
+    title,
+    date,
+    image
+  }
+  }`,
+  
+  aboutPage: `*[_type == "aboutPage"][0] {
+    monaGroupLogo,
+    storyTitle,
+    storyParagraphs,
+    storyImage,
+    values
+  }`,
+  
+  cuisinePage: `*[_type == "cuisinePage"][0] {
+    videoUrl,
+    menuLink,
+    title,
+    description,
+    carouselImages
+  }`,
+  
+  homePage: `*[_type == "homePage"][0] {
+    monaExperience,
+    rhythmOfMona
+  }`,
+  
+  careersPage: `*[_type == "careersPage"][0] {
+    title,
+    paragraphs,
+    jobsEmail,
+    linkedInUrl,
+    mainImage,
+    benefits
+  }`
+}

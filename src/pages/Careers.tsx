@@ -1,8 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Award, Crown as Growth, Heart, Mail, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { useCareersPage, useContactInfo } from '../hooks/useSanity';
+import { urlFor } from '../lib/sanity';
 
 const Careers: React.FC = () => {
+  const { data: careersData, loading: careersLoading } = useCareersPage();
+  const { data: contactData, loading: contactLoading } = useContactInfo();
+
+  // Show loading state
+  if (careersLoading || contactLoading) {
+    return (
+      <div className="min-h-screen bg-[#4E5A48] flex items-center justify-center">
+        <div className="text-white text-lg"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#4E5A48]">
 
@@ -37,25 +51,42 @@ const Careers: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
               >
-                JOIN THE MONA<br />EXPERIENCE
+                {careersData?.title ? careersData.title.split(' ').slice(0, 2).join(' ') : "JOIN THE MONA"}<br />
+                {careersData?.title ? careersData.title.split(' ').slice(2).join(' ') : "EXPERIENCE"}
               </motion.h2>
               <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6 font-colfax-regular">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                >
-                  Mona Verde is more than just a workplace, we're a tight-knit group of people who genuinely care about hospitality and creating moments that matter. If that sounds like your kind of place, we'd love to meet you.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                >
-                  Whether you've been in hospitality for years or you're just starting out, we'll give you the training and support you need to thrive in our world of elevated dining.
-                </motion.p>
+                {careersData?.paragraphs && careersData.paragraphs.length > 0 ? (
+                  careersData.paragraphs.slice(0, 2).map((paragraph, index) => (
+                    <motion.p
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ))
+                ) : (
+                  <>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      Mona Verde is more than just a workplace, we're a tight-knit group of people who genuinely care about hospitality and creating moments that matter. If that sounds like your kind of place, we'd love to meet you.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    >
+                      Whether you've been in hospitality for years or you're just starting out, we'll give you the training and support you need to thrive in our world of elevated dining.
+                    </motion.p>
+                  </>
+                )}
               </div>
 
               <motion.p
@@ -67,21 +98,20 @@ const Careers: React.FC = () => {
               >
                 Send your resume to{' '}
                 <a 
-                  href="mailto:jobs@monaexperience.com" 
+                  href={`mailto:${careersData?.jobsEmail || contactData?.jobsEmail || 'jobs@monaexperience.com'}`}
                   className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300"
                 >
-                  jobs@monaexperience.com
+                  {careersData?.jobsEmail || contactData?.jobsEmail || 'jobs@monaexperience.com'}
                 </a>
               </motion.p>
 
               <div className="space-y-4">
-                
                 <motion.a
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-                  href="https://pt.linkedin.com/company/monaexperience"
+                  href={careersData?.linkedInUrl || "https://pt.linkedin.com/company/monaexperience"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 text-[#4E5A48] uppercase tracking-wider font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 group"
@@ -101,7 +131,7 @@ const Careers: React.FC = () => {
             >
               <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden max-w-md mx-auto">
                 <img
-                  src="https://lh3.googleusercontent.com/pw/AP1GczM2z7YyxKphZRWy2RzJSaWSUx3D-i8cCILWkv_ZM02tWxnzEYuJs-4Xblpkc1tm5B7nIfZnLOVMUIjBzG5R86-wC4LGd9Rain_gFSkwGyRbQeM_1Ws2SGOJYkLlQz4vrH8jyI0vCS5nlDm39nd7PxTM=w1080-h1397-s-no-gm?authuser=1"
+                  src={careersData?.mainImage ? urlFor(careersData.mainImage).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczM2z7YyxKphZRWy2RzJSaWSUx3D-i8cCILWkv_ZM02tWxnzEYuJs-4Xblpkc1tm5B7nIfZnLOVMUIjBzG5R86-wC4LGd9Rain_gFSkwGyRbQeM_1Ws2SGOJYkLlQz4vrH8jyI0vCS5nlDm39nd7PxTM=w1080-h1397-s-no-gm?authuser=1"}
                   alt="Team Working Together"
                   className="w-full h-full object-cover"
                 />
@@ -116,129 +146,159 @@ const Careers: React.FC = () => {
         <div className="max-w-6xl mx-auto px-6">
           {/* Values Grid with Enhanced Spacing */}
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-8 lg:gap-12">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                GROWTH
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                Career development opportunities within the Mona Group ecosystem.
-              </motion.p>
-            </motion.div>
+            {careersData?.benefits && careersData.benefits.length > 0 ? (
+              careersData.benefits.map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 + (index * 0.1), ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  {/* Dash with enhanced spacing */}
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  
+                  {/* Title with proper spacing */}
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    {benefit.title}
+                  </motion.h3>
+                  
+                  {/* Description with enhanced bottom spacing */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4 + (index * 0.1), ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    {benefit.description}
+                  </motion.p>
+                </motion.div>
+              ))
+            ) : (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    GROWTH
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    Career development opportunities within the Mona Group ecosystem.
+                  </motion.p>
+                </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                EXCELLENCE
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                Work in an environment with the highest standards of hospitality.
-              </motion.p>
-            </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    EXCELLENCE
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    Work in an environment with the highest standards of hospitality.
+                  </motion.p>
+                </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                BENEFITS
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                Competitive compensation, health benefits, and exclusive employee perks.
-              </motion.p>
-            </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    BENEFITS
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    Competitive compensation, health benefits, and exclusive employee perks.
+                  </motion.p>
+                </motion.div>
+              </>
+            )}
           </div>
           
           {/* Additional bottom spacing for the entire section */}
           <div className="pb-4"></div>
         </div>
       </section>
-
 
     </div>
   );

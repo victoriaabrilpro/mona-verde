@@ -1,7 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAboutPage } from '../hooks/useSanity';
+import { urlFor } from '../lib/sanity';
 
 const About: React.FC = () => {
+  const { data: aboutData, loading } = useAboutPage();
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#4E5A48] flex items-center justify-center">
+        <div className="text-white text-lg"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#4E5A48]">
       {/* Hero Section */}
@@ -17,7 +30,7 @@ const About: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-                src="https://lh3.googleusercontent.com/pw/AP1GczOhnzdY8bqzBrr7vvWdQFDCcFSW5O1CVJn_uw2mUWf5oXYYJseP4IL5t9pfXw3ExwuCO1K9fIzT_VcZX2xuidxsMVGFwwcZsx6ZzdjBw14TQ0ItArRhi-RR5kGqjj-kkVyIfLct7-UCnVyUAXVDpXqF=w1563-h772-s-no-gm?authuser=1"
+                src={aboutData?.monaGroupLogo ? urlFor(aboutData.monaGroupLogo).width(800).url() : "https://lh3.googleusercontent.com/pw/AP1GczOhnzdY8bqzBrr7vvWdQFDCcFSW5O1CVJn_uw2mUWf5oXYYJseP4IL5t9pfXw3ExwuCO1K9fIzT_VcZX2xuidxsMVGFwwcZsx6ZzdjBw14TQ0ItArRhi-RR5kGqjj-kkVyIfLct7-UCnVyUAXVDpXqF=w1563-h772-s-no-gm?authuser=1"}
                 alt="Mona Group Logo"
                 className="h-32 w-auto mx-auto mb-4"
               />
@@ -44,33 +57,49 @@ const About: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48] mb-8 mt-8 md:-mt-6"
               >
-                MONA'S STORY
+                {aboutData?.storyTitle || "MONA'S STORY"}
               </motion.h1>
               <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6 font-colfax-regular -mt-10">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                >
-                  The Mona Group brings together a collection of special places: each one different, but all sharing our love for good living, genuine connections, and celebrating what makes life beautiful. From restaurants to nightlife, we create spaces that feel like home while taking you somewhere new.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                >
-                  Mona Verde is our rooftop love letter to this philosophy, think of it as our urban jungle where different flavors, cultures, and energies mix to create something that feels both familiar and exciting.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-                >
-                  Coming soon, Mona Libre: our supper club where dinner becomes an intimate celebration. We can't wait to share it with you.
-                </motion.p>
+                {aboutData?.storyParagraphs && aboutData.storyParagraphs.length > 0 ? (
+                  aboutData.storyParagraphs.map((paragraph, index) => (
+                    <motion.p
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ))
+                ) : (
+                  <>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      The Mona Group brings together a collection of special places: each one different, but all sharing our love for good living, genuine connections, and celebrating what makes life beautiful. From restaurants to nightlife, we create spaces that feel like home while taking you somewhere new.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    >
+                      Mona Verde is our rooftop love letter to this philosophy, think of it as our urban jungle where different flavors, cultures, and energies mix to create something that feels both familiar and exciting.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                    >
+                      Coming soon, Mona Libre: our supper club where dinner becomes an intimate celebration. We can't wait to share it with you.
+                    </motion.p>
+                  </>
+                )}
               </div>
             </motion.div>
 
@@ -83,7 +112,7 @@ const About: React.FC = () => {
             >
               <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden max-w-sm mx-auto">
                 <img
-                  src="https://lh3.googleusercontent.com/pw/AP1GczMUx3Y_opgbreeJmNAmTVNKj4QNuJb5UWyi4kDz-fX581Q7IhokkheE30PjxT6Eflc4QeLd7MZ9KMzX_US11-kzoJUgSf8A1LGggzvqKnkDhkAFZ0lKpLWgTGxq5Su2Ey3APJuedu49jeIt3S1fvyZG=w1338-h2008-s-no-gm?authuser=1"
+                  src={aboutData?.storyImage ? urlFor(aboutData.storyImage).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczMUx3Y_opgbreeJmNAmTVNKj4QNuJb5UWyi4kDz-fX581Q7IhokkheE30PjxT6Eflc4QeLd7MZ9KMzX_US11-kzoJUgSf8A1LGggzvqKnkDhkAFZ0lKpLWgTGxq5Su2Ey3APJuedu49jeIt3S1fvyZG=w1338-h2008-s-no-gm?authuser=1"}
                   alt="Mona Group"
                   className="w-full h-full object-cover"
                 />
@@ -110,122 +139,153 @@ const About: React.FC = () => {
         <div className="max-w-6xl mx-auto px-6">
           {/* Values Grid with Enhanced Spacing */}
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-8 lg:gap-12 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                CELEBRATE
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                Every moment deserves to be celebrated with exceptional food, drinks, and atmosphere.
-              </motion.p>
-            </motion.div>
+            {aboutData?.values && aboutData.values.length > 0 ? (
+              aboutData.values.map((value, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 + (index * 0.1), ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  {/* Dash with enhanced spacing */}
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  
+                  {/* Title with proper spacing */}
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    {value.title}
+                  </motion.h3>
+                  
+                  {/* Description with enhanced bottom spacing */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4 + (index * 0.1), ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    {value.description}
+                  </motion.p>
+                </motion.div>
+              ))
+            ) : (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    CELEBRATE
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    Every moment deserves to be celebrated with exceptional food, drinks, and atmosphere.
+                  </motion.p>
+                </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                CONNECT
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                We bring people together through shared experiences and the universal language of hospitality.
-              </motion.p>
-            </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    CONNECT
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    We bring people together through shared experiences and the universal language of hospitality.
+                  </motion.p>
+                </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
-            >
-              {/* Dash with enhanced spacing */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                whileInView={{ opacity: 1, scaleX: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="w-12 h-1 bg-white mb-4"
-              ></motion.div>
-              
-              {/* Title with proper spacing */}
-              <motion.h3
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="text-2xl font-pp-haton text-white"
-              >
-                EXPERIENCE
-              </motion.h3>
-              
-              {/* Description with enhanced bottom spacing */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
-              >
-                We craft unforgettable experiences that engage all senses and create lasting memories.
-              </motion.p>
-            </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                  className="text-center space-y-4 flex flex-col items-center justify-center min-h-[200px] px-4 flex-1 max-w-xs mx-auto"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                    className="w-12 h-1 bg-white mb-4"
+                  ></motion.div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                    className="text-2xl font-pp-haton text-white"
+                  >
+                    EXPERIENCE
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular text-center pb-4"
+                  >
+                    We craft unforgettable experiences that engage all senses and create lasting memories.
+                  </motion.p>
+                </motion.div>
+              </>
+            )}
           </div>
           
           {/* Additional bottom spacing for the entire section */}

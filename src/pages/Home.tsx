@@ -1,75 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Instagram, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ReservationWidget from '../components/ReservationWidget';
+import { client, urlFor, queries } from '../lib/sanity';
+import type { HeroSection, HomePage } from '../types/sanity';
 
 const Home: React.FC = () => {
-  const [isReservationOpen, setIsReservationOpen] = React.useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
-  const [monaExperienceIndex, setMonaExperienceIndex] = React.useState(0);
-  const [rhythmOfMonaIndex, setRhythmOfMonaIndex] = React.useState(0);
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [monaExperienceIndex, setMonaExperienceIndex] = useState(0);
+  const [rhythmOfMonaIndex, setRhythmOfMonaIndex] = useState(0);
+  
+  // Sanity data state
+  const [heroData, setHeroData] = useState<HeroSection | null>(null);
+  const [homeData, setHomeData] = useState<HomePage | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const heroImages = [
-    'https://lh3.googleusercontent.com/pw/AP1GczNb4PLuygeKoIERnj5pS64_MzFejUXFxWssuBrHeFfUC2AgwJON1Ib9Dv__KHlAoAd0QQmEB5gLKJvYWL9x3z2R75ok5JiNN7K3-yDPLz71SAhe-prLttGwoiGp47s4vGCvnk-1dgIVokNMeLxOGIkV=w1590-h2008-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczMbW9Z0gEE6Xs43nQCkS4kKjtqcvQbHUfECLR8g0aZyLcJ4dkq1dUIkIRIFjtw9m0rlV1avqnB-hBvpDN7QVFzB-yNPxxGP3ykXpQ9SFm3IrRoZ_aB1yp1jRuV1wnc1EfM4PKzO2mSzQwS2Cgq1dows=w1445-h773-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczOrstK808rUwrGKVqyzf04Qziqr-f6g6eA64GnNgUrD09ifcebjV3F5CtpMAnhPEr-QEQQYEmgwTRi9IwncxCQDGeThHwVpUqtQUaE4McG1ZtGI7LzZME_IAogRZBrxJ4-2L8k22rw6dfGdd2fkUVa_=w1482-h2008-s-no-gm?authuser=1'
-  ];
+  // Fetch data from Sanity
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [hero, home] = await Promise.all([
+          client.fetch<HeroSection>(queries.heroSection),
+          client.fetch<HomePage>(queries.homePage)
+        ]);
+        
+        setHeroData(hero);
+        setHomeData(home);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching home page data:', error);
+        setLoading(false);
+      }
+    };
 
-  const monaExperienceImages = [
-    'https://lh3.googleusercontent.com/pw/AP1GczPJGBuSpIhoAYWPnXWXbrnOFEcEViUCMs35-rGaQSP6mQ-zDX40u_0Et3tb3A60uXWym41Hq1iRBVlHxDu_22al0skZZJ-i2o_1omVJr8R3FqZ7ZRuEQXfUYpCJCfPesvXBYs5zFqMuz7xkYvhYPZeN=w861-h1289-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczOlC4InOS2g5fe4qXtJK7u6sfV0jgUIEyfgtw7kfMb-CCUBlY772YIJhRLGFX31_cH52SR80jtmCmxqsFZOjXatxB9CHcKMDi1zHjB0oM6YvZ4depY5QeF5lV7C2ZAyxWI8dLXndwRIWfY9h_LDpwjI=w1080-h1616-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczPs7wb2W8CR8qbRBla6tjH46tuH5utXqXGx-NathlHBq0lBXEIIX1xua3t85NyzYRJtRsPC-QA0Avu8fbWzO3MsDy1bpVF9b7aNVSUrJEx_wVIARoeKXiv6dRKXzqKvn0jiX73Rc26VJqRlLVWWJCs8=w1338-h2008-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczO_z8-Lf9bmE90tkVxsYFvpiInpNvC8pYmqkos3U5YSER_e2dQO3Cee5kCAyxwIOI8rQ8gpmqv8iW7GRm2Om3g1yUnbFNqKpk_ExD3xt7wh5s_I88WwJHxGUm3E6kCARnecCaqgpRMb_0-C1ZuESr18=w1080-h1616-s-no-gm?authuser=1'
-  ];
+    fetchData();
+  }, []);
 
-  const rhythmOfMonaImages = [
-    'https://lh3.googleusercontent.com/pw/AP1GczNnl7E8kxhTLzm_Xp1go48_E0TvgZCuMLf_RBny1zQHNAFLPErH0YhxWfZnXuQQhAD9EPkK_-u22_ajRhHVc3-9ccM3c9qqbLCZoN-z9Ixj_Hhn4B5iNfDX4yJgOx0wkeTI_xGgmXtyiAQ6w4roIucE=w1080-h1616-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczNraeOZiaoOPmfp3UcJKkEPl7JkKZMxNyM4NJmehDTO_HQkQ-K_S39J-HB7krH809ThpKX35G3J1KtJ-BMu46DMja83KJA_T07LGly_Gbt1HvoxSCiKhgHm9BKc8S23fEhM886YZYhZKYT7yWV90FzP=w1080-h1616-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczP2Cmz7Wo3xWSeUAaH53xsHk7mwS9xkDKqY6_k4G-mlWrrvguwCBRrL9mfx9S0b4oEDXQXb0DKbfiKYIHUTpJpt7PgpOECrwop7dVR6CJtdhzPwNwBlhUbtjUCDw43BTWlaf4lCeai7yyqT2yHSsEv4=w1080-h1616-s-no-gm?authuser=1',
-    'https://lh3.googleusercontent.com/pw/AP1GczMMJuIMn9fu8kFXAhDydJx7g5_Q9_24FWa-eUHC9IoGYHyzdjOZhQ749X1LhdCxOZQ-nyqsQyIjKzWpkEM8QitLCvSZuTybiXwnYqcodliiQN1oN4Zg__eOPJyLRgGUWYXTcnDyr4noD-BTTQsWqIYh=w1080-h1616-s-no-gm?authuser=1'
-  ];
-
-  const partners = [
-    { name: 'Partner 1', logo: 'https://lh3.googleusercontent.com/pw/AP1GczN9FVve-XCGUsWfICdbxKD0bOFc8dZp-oMCHKrwP0LyVyHqoQp37i-AKN-jMx0p69_2yWzVoqHoBVWNCWi23GPri0UVCfIhAF4_JJqwkDC7x7fqT9kUeiF1hnp0HBWZ-aurTsS6HtljcpcG9b5rnHJA=w627-h146-s-no-gm?authuser=1' },
-    { name: 'Partner 2', logo: 'https://lh3.googleusercontent.com/pw/AP1GczMccaABlP4Qz682sFOoSFzcUpjJGKkxJ0XfUjUs1x_iE4BxzuGB7isCgdQNLO1S7EsJsduTxG3OhHN_ELqiGMV5WtG_h2amM6tJKLziVFnFJhCc5IYz4GXSrmq3_RkXothIaSaV1Jf896e9Oao8N6wD=w413-h97-s-no-gm?authuser=1' },
-    { name: 'Partner 3', logo: 'https://lh3.googleusercontent.com/pw/AP1GczN3HevjumbtYLmF2vf-gP_V9-MfEYashi_atlEfkkHCSnx2PLTwu6raiCq-A89U6nXObAycEaAgQFtDENTxMVlgdGDXOSE3jspeia5Zx0McUxRmyXqukGu_aKMdGmYZFoL2GiSedf1-eNYO4Xh5O_4d=w3200-h1378-s-no-gm?authuser=1' },
-    { name: 'Partner 4', logo: 'https://lh3.googleusercontent.com/pw/AP1GczNb6D8-2GXcZknV-qp0hNydRgErpr1hFkHte5co2fZcjc5T8rgX5_BXNTyvdCZafTYalHF53eL6ETVLzHQfyJ0R2ZDu3O9L_jB-AvbVkqtERImKDwvcqSqvaCzAKOQiHMgloRIYZ2cctxXcvhWkXZc2=w2422-h663-s-no-gm?authuser=1' },
-    { name: 'Partner 5', logo: 'https://lh3.googleusercontent.com/pw/AP1GczMlWVH_zXTw13jCIxyi_H0PRQIdMZ_4hhu0fb5NNOSBOJsO_uDVs9x0Kw4fOqJ0RMmQOXrY-gMwsTRPNzjwgkMOi9Ik0evrd_q8ZFkZ8VaE3wyyw50d4E3azqgkZVaRIXBv6gQpxme4zBw94thE6IQf=w1177-h254-s-no-gm?authuser=1' },
-    { name: 'Partner 6', logo: 'https://lh3.googleusercontent.com/pw/AP1GczO_RQRdhG3ZnuRGLFxekAoWVUFzujC_KotKl-i9Sreir0j6CqcmJf_xJt8GqGGGf2jXC6CsAf-i3aI9dinc4p2cwtE38DSRo6BhC4Q75vTvDifq3ED0v6EPgO4bf0XWeZm4J6_N_HC8S8rlp5lcIscq=w3600-h642-s-no-gm?authuser=1' },
-  ];
-
-  React.useEffect(() => {
+  // Hero carousel effect
+  useEffect(() => {
+    if (!heroData?.images?.length) return;
+    
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
-    }, 5000); // Change image every 5 seconds
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroData.images.length);
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [heroImages.length]);
+  }, [heroData?.images?.length]);
 
-  React.useEffect(() => {
+  // Mona Experience carousel effect
+  useEffect(() => {
+    if (!homeData?.monaExperience?.images?.length) return;
+    
     const interval = setInterval(() => {
-      setMonaExperienceIndex((prevIndex) => (prevIndex + 1) % monaExperienceImages.length);
-    }, 3000); // Change image every 3 seconds
+      setMonaExperienceIndex((prevIndex) => (prevIndex + 1) % homeData.monaExperience.images.length);
+    }, 3000);
 
     return () => clearInterval(interval);
-  }, [monaExperienceImages.length]);
+  }, [homeData?.monaExperience?.images?.length]);
 
-  React.useEffect(() => {
+  // Rhythm of Mona carousel effect
+  useEffect(() => {
+    if (!homeData?.rhythmOfMona?.images?.length) return;
+    
     const interval = setInterval(() => {
-      setRhythmOfMonaIndex((prevIndex) => (prevIndex + 1) % rhythmOfMonaImages.length);
-    }, 3500); // Change image every 3.5 seconds (slightly different timing)
+      setRhythmOfMonaIndex((prevIndex) => (prevIndex + 1) % homeData.rhythmOfMona.images.length);
+    }, 3500);
 
     return () => clearInterval(interval);
-  }, [rhythmOfMonaImages.length]);
+  }, [homeData?.rhythmOfMona?.images?.length]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p className="text-[#4E5A48] font-colfax-regular"></p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section with Video Background */}
+      {/* Hero Section with Image Carousel */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Image Carousel Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#4E5A48]/30 to-[#4E5A48]/50">
-          {heroImages.map((image, index) => (
+          {heroData?.images?.map((image, index) => (
             <motion.div
               key={index}
               className="absolute inset-0 w-full h-full"
@@ -85,7 +101,7 @@ const Home: React.FC = () => {
             >
               <div 
                 className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url('${image}')` }}
+                style={{ backgroundImage: `url('${urlFor(image).width(1920).url()}')` }}
               ></div>
             </motion.div>
           ))}
@@ -106,7 +122,7 @@ const Home: React.FC = () => {
               />
             </h1>
             <p className="text-lg md:text-xl mb-8 font-canela tracking-widest uppercase">
-              <span className="text-sm md:text-xl">CELEBRATE · CONNECT · EXPERIENCE</span>
+              <span className="text-sm md:text-xl">{heroData?.tagline || 'CELEBRATE · CONNECT · EXPERIENCE'}</span>
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <motion.button
@@ -135,25 +151,26 @@ const Home: React.FC = () => {
         </div>
 
         {/* Carousel Indicators */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
-          className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20"
-        >
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 hover:scale-110 ${
-                index === currentImageIndex 
-                  ? 'bg-white' 
-                  : 'bg-transparent'
-              } focus:outline-none`}
-            />
-          ))}
-        </motion.div>
-
+        {heroData?.images && heroData.images.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20"
+          >
+            {heroData.images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 hover:scale-110 ${
+                  index === currentImageIndex 
+                    ? 'bg-white' 
+                    : 'bg-transparent'
+                } focus:outline-none`}
+              />
+            ))}
+          </motion.div>
+        )}
       </section>
 
       {/* Image Decorative Bar */}
@@ -187,45 +204,33 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
               >
-                MONA EXPERIENCE<br />LISBON
+                {homeData?.monaExperience?.title || 'MONA EXPERIENCE'}<br />
+                {homeData?.monaExperience?.subtitle || 'LISBON'}
               </motion.h2>
               <div className="space-y-4 md:space-y-8">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                  className="text-black text-base md:text-lg leading-relaxed font-colfax-regular"
-                >
-                  Your Garden Rooftop Escape in Lisboa's Heart
-                </motion.p>
-                <div className="text-black text-base md:text-lg leading-relaxed font-colfax-regular space-y-3 md:space-y-6">
+                {homeData?.monaExperience?.paragraphs?.map((paragraph, index) => (
                   <motion.p
+                    key={index}
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    className="text-black text-base md:text-lg leading-relaxed font-colfax-regular"
                   >
-                    Mona Verde isn't just another restaurant, it's our philosophy of living well. Here, we've created a space where warmth meets joy, where every detail reflects our passion for life and hospitality.
+                    {paragraph}
                   </motion.p>
-                  <motion.p
+                ))}
+                {homeData?.monaExperience?.tagline && (
+                  <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                    transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                    className="text-[#4E5A48] text-lg font-colfax-medium tracking-widest uppercase"
                   >
-                    Working with the talented team at Archer Humphryes, we've designed Mona Verde around what matters most: being present, sharing great food, and staying open to the world around us. You'll find cultures mixing, flavors dancing, and emotions flowing freely: it's where energy meets elegance.
-                  </motion.p>
-                </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-                  className="text-[#4E5A48] text-lg font-colfax-medium tracking-widest uppercase"
-                >
-                  Celebrate · Connect · Experience
-                </motion.div>
+                    {homeData.monaExperience.tagline}
+                  </motion.div>
+                )}
               </div>
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -234,12 +239,12 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
               >
                 <Link
-                to="/about"
-                className="inline-block text-[#4E5A48] uppercase tracking-widest font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 flex items-center space-x-2 group"
-              >
-                <span>Discover Our Story</span>
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+                  to="/about"
+                  className="inline-block text-[#4E5A48] uppercase tracking-widest font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 flex items-center space-x-2 group"
+                >
+                  <span>Discover Our Story</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -252,10 +257,10 @@ const Home: React.FC = () => {
             >
               <div className="w-screen lg:w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-0 relative left-1/2 transform -translate-x-1/2 lg:left-0 lg:transform-none overflow-hidden">
                 <div className="relative w-full h-full" style={{ aspectRatio: '3/4' }}>
-                  {monaExperienceImages.map((image, index) => (
+                  {homeData?.monaExperience?.images?.map((image, index) => (
                     <motion.img
                       key={index}
-                      src={image}
+                      src={urlFor(image).width(800).url()}
                       alt={`Mona Experience ${index + 1}`}
                       className="w-full h-full object-cover absolute inset-0"
                       initial={{ opacity: 0 }}
@@ -269,14 +274,14 @@ const Home: React.FC = () => {
                       }}
                     />
                   ))}
-                  
                 </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
-      {/* Entertainment Section */}
+
+      {/* Rhythm of Mona Section */}
       <section className="bg-[#4E5A48] relative overflow-hidden">
         {/* Background Image Overlay */}
         <div 
@@ -306,25 +311,20 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-white"
               >
-                RHYTHM OF MONA
+                {homeData?.rhythmOfMona?.title || 'RHYTHM OF MONA'}
               </motion.h2>
               <div className="text-white/90 text-lg leading-relaxed space-y-6 font-colfax-regular">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                >
-                  Music flows through Mona Verde like a heartbeat: you might not always notice it, but it's always there, adding warmth to every conversation and emotion to every bite. We love mixing soulful R&B with global rhythms, but it's the Latin sounds that really capture who we are.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                >
-                  Our DJs and live performers know how to read the room: the music shifts as the evening unfolds, from those golden sunset hours to the late-night conversations. It's uplifting without trying too hard, refined but never stuffy.
-                </motion.p>
+                {homeData?.rhythmOfMona?.paragraphs?.map((paragraph, index) => (
+                  <motion.p
+                    key={index}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                  >
+                    {paragraph}
+                  </motion.p>
+                ))}
               </div>
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -333,13 +333,13 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
               >
                 <Link
-                to="/events"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="inline-block text-white/90 uppercase tracking-widest font-colfax-regular hover:text-white transition-colors duration-300 flex items-center space-x-2 group"
-              >
-                <span>Explore Our Events</span>
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+                  to="/events"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="inline-block text-white/90 uppercase tracking-widest font-colfax-regular hover:text-white transition-colors duration-300 flex items-center space-x-2 group"
+                >
+                  <span>Explore Our Events</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -352,10 +352,10 @@ const Home: React.FC = () => {
             >
               <div className="w-screen lg:w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-0 relative left-1/2 transform -translate-x-1/2 lg:left-0 lg:transform-none overflow-hidden">
                 <div className="relative w-full h-full" style={{ aspectRatio: '3/4' }}>
-                  {rhythmOfMonaImages.map((image, index) => (
+                  {homeData?.rhythmOfMona?.images?.map((image, index) => (
                     <motion.img
                       key={index}
-                      src={image}
+                      src={urlFor(image).width(800).url()}
                       alt={`Rhythm of Mona ${index + 1}`}
                       className="w-full h-full object-cover absolute inset-0"
                       initial={{ opacity: 0 }}
@@ -369,7 +369,6 @@ const Home: React.FC = () => {
                       }}
                     />
                   ))}
-                  
                 </div>
               </div>
             </motion.div>
@@ -404,11 +403,11 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               >
                 <Link
-                to="/cuisine"
-                className="inline-flex items-center space-x-2 border-2 border-[#4E5A48] text-[#4E5A48] px-6 py-2 text-xs uppercase tracking-[0.15em] font-colfax-medium hover:bg-[#4E5A48] hover:text-white transition-all duration-300 group-hover:scale-105"
-              >
-                <span>Explore Menu</span>
-              </Link>
+                  to="/cuisine"
+                  className="inline-flex items-center space-x-2 border-2 border-[#4E5A48] text-[#4E5A48] px-6 py-2 text-xs uppercase tracking-[0.15em] font-colfax-medium hover:bg-[#4E5A48] hover:text-white transition-all duration-300 group-hover:scale-105"
+                >
+                  <span>Explore Menu</span>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -435,11 +434,11 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
               >
                 <Link
-                to="/events"
-                className="inline-flex items-center space-x-2 border-2 border-[#4E5A48] text-[#4E5A48] px-6 py-2 text-xs uppercase tracking-[0.15em] font-colfax-medium hover:bg-[#4E5A48] hover:text-white transition-all duration-300 group-hover:scale-105"
-              >
-                <span>Plan Event</span>
-              </Link>
+                  to="/events"
+                  className="inline-flex items-center space-x-2 border-2 border-[#4E5A48] text-[#4E5A48] px-6 py-2 text-xs uppercase tracking-[0.15em] font-colfax-medium hover:bg-[#4E5A48] hover:text-white transition-all duration-300 group-hover:scale-105"
+                >
+                  <span>Plan Event</span>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -479,7 +478,6 @@ const Home: React.FC = () => {
         isOpen={isReservationOpen} 
         onClose={() => setIsReservationOpen(false)} 
       />
-
     </div>
   );
 };

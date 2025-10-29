@@ -1,22 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, MapPin, Clock, Mail, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PrivacyPolicyModal from './PrivacyPolicyModal';
 import TermsOfServiceModal from './TermsOfServiceModal';
+import { client, urlFor, queries } from '../lib/sanity';
+import type { Partner, ContactInfo } from '../types/sanity';
 
 const Footer: React.FC = () => {
-  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = React.useState(false);
-  const [isTermsOfServiceOpen, setIsTermsOfServiceOpen] = React.useState(false);
+  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
+  const [isTermsOfServiceOpen, setIsTermsOfServiceOpen] = useState(false);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const partners = [
-    { name: 'Partner 1', logo: 'https://lh3.googleusercontent.com/pw/AP1GczN9FVve-XCGUsWfICdbxKD0bOFc8dZp-oMCHKrwP0LyVyHqoQp37i-AKN-jMx0p69_2yWzVoqHoBVWNCWi23GPri0UVCfIhAF4_JJqwkDC7x7fqT9kUeiF1hnp0HBWZ-aurTsS6HtljcpcG9b5rnHJA=w627-h146-s-no-gm?authuser=1' },
-    { name: 'Partner 2', logo: 'https://lh3.googleusercontent.com/pw/AP1GczMccaABlP4Qz682sFOoSFzcUpjJGKkxJ0XfUjUs1x_iE4BxzuGB7isCgdQNLO1S7EsJsduTxG3OhHN_ELqiGMV5WtG_h2amM6tJKLziVFnFJhCc5IYz4GXSrmq3_RkXothIaSaV1Jf896e9Oao8N6wD=w413-h97-s-no-gm?authuser=1' },
-    { name: 'Partner 3', logo: 'https://lh3.googleusercontent.com/pw/AP1GczN3HevjumbtYLmF2vf-gP_V9-MfEYashi_atlEfkkHCSnx2PLTwu6raiCq-A89U6nXObAycEaAgQFtDENTxMVlgdGDXOSE3jspeia5Zx0McUxRmyXqukGu_aKMdGmYZFoL2GiSedf1-eNYO4Xh5O_4d=w3200-h1378-s-no-gm?authuser=1' },
-    { name: 'Partner 4', logo: 'https://lh3.googleusercontent.com/pw/AP1GczNb6D8-2GXcZknV-qp0hNydRgErpr1hFkHte5co2fZcjc5T8rgX5_BXNTyvdCZafTYalHF53eL6ETVLzHQfyJ0R2ZDu3O9L_jB-AvbVkqtERImKDwvcqSqvaCzAKOQiHMgloRIYZ2cctxXcvhWkXZc2=w2422-h663-s-no-gm?authuser=1' },
-    { name: 'Partner 5', logo: 'https://lh3.googleusercontent.com/pw/AP1GczMlWVH_zXTw13jCIxyi_H0PRQIdMZ_4hhu0fb5NNOSBOJsO_uDVs9x0Kw4fOqJ0RMmQOXrY-gMwsTRPNzjwgkMOi9Ik0evrd_q8ZFkZ8VaE3wyyw50d4E3azqgkZVaRIXBv6gQpxme4zBw94thE6IQf=w1177-h254-s-no-gm?authuser=1' },
-    { name: 'Partner 6', logo: 'https://lh3.googleusercontent.com/pw/AP1GczO_RQRdhG3ZnuRGLFxekAoWVUFzujC_KotKl-i9Sreir0j6CqcmJf_xJt8GqGGGf2jXC6CsAf-i3aI9dinc4p2cwtE38DSRo6BhC4Q75vTvDifq3ED0v6EPgO4bf0XWeZm4J6_N_HC8S8rlp5lcIscq=w3600-h642-s-no-gm?authuser=1' },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [partnersData, contactData] = await Promise.all([
+          client.fetch<Partner[]>(queries.partners),
+          client.fetch<ContactInfo>(queries.contactInfo)
+        ]);
+        
+        setPartners(partnersData);
+        setContactInfo(contactData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching footer data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <footer className="bg-white text-[#4E5A48] py-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-[#4E5A48]/70 font-colfax-regular"></p>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="bg-white text-[#4E5A48]">
@@ -38,7 +64,7 @@ const Footer: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.05 * index, ease: "easeOut" }}
-                  key={index}
+                  key={partner._id}
                   className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                   style={{ 
                     minWidth: '128px', 
@@ -46,7 +72,7 @@ const Footer: React.FC = () => {
                   }}
                 >
                   <img
-                    src={partner.logo}
+                    src={urlFor(partner.logo).width(300).url()}
                     alt={partner.name}
                     className="w-full h-full object-contain opacity-60"
                     style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
@@ -59,9 +85,9 @@ const Footer: React.FC = () => {
             <div className="md:hidden overflow-hidden">
               <div className="flex items-center gap-8 animate-scroll">
                 {/* First set of logos */}
-                {partners.map((partner, index) => (
+                {partners.map((partner) => (
                   <div
-                    key={`first-${index}`}
+                    key={`first-${partner._id}`}
                     className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                     style={{ 
                       minWidth: '128px', 
@@ -69,7 +95,7 @@ const Footer: React.FC = () => {
                     }}
                   >
                     <img
-                      src={partner.logo}
+                      src={urlFor(partner.logo).width(300).url()}
                       alt={partner.name}
                       className="w-full h-full object-contain opacity-60"
                       style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
@@ -77,9 +103,9 @@ const Footer: React.FC = () => {
                   </div>
                 ))}
                 {/* Duplicate set for seamless loop */}
-                {partners.map((partner, index) => (
+                {partners.map((partner) => (
                   <div
-                    key={`second-${index}`}
+                    key={`second-${partner._id}`}
                     className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                     style={{ 
                       minWidth: '128px', 
@@ -87,7 +113,7 @@ const Footer: React.FC = () => {
                     }}
                   >
                     <img
-                      src={partner.logo}
+                      src={urlFor(partner.logo).width(300).url()}
                       alt={partner.name}
                       className="w-full h-full object-contain opacity-60"
                       style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
@@ -151,22 +177,26 @@ const Footer: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
               className="flex space-x-4"
             >
-              <a
-                href="https://www.instagram.com/monaverdelisboa/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/monaexperience/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200"
-              >
-                <Linkedin size={20} />
-              </a>
+              {contactInfo?.socialMedia?.instagram && (
+                <a
+                  href={contactInfo.socialMedia.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200"
+                >
+                  <Instagram size={20} />
+                </a>
+              )}
+              {contactInfo?.socialMedia?.linkedin && (
+                <a
+                  href={contactInfo.socialMedia.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200"
+                >
+                  <Linkedin size={20} />
+                </a>
+              )}
             </motion.div>
           </motion.div>
 
@@ -188,60 +218,70 @@ const Footer: React.FC = () => {
               Contact
             </motion.h4>
             <div className="space-y-3 text-sm">
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
-                className="flex items-center space-x-3"
-              >
-                <Phone size={16} className="text-[#F79548]" />
-                <a href="tel:+351914023304" className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                  +351 914 023 304
-                </a>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
-                className="flex items-center space-x-3"
-              >
-                <Mail size={16} className="text-[#F79548]" />
-                <a href="mailto:booking@monaexperience.com" className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                  booking@monaexperience.com
-                </a>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-2"
-              >
-                1-19 guests dining
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
-                className="flex items-center space-x-3"
-              >
-                <Mail size={16} className="text-[#F79548]" />
-                <a href="mailto:events@monaexperience.com" className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                  events@monaexperience.com
-                </a>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-1"
-              >
-                20+ guests or private events
-              </motion.div>
+              {contactInfo?.phone && (
+                <motion.div
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
+                  className="flex items-center space-x-3"
+                >
+                  <Phone size={16} className="text-[#F79548]" />
+                  <a href={`tel:${contactInfo.phone}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+                    {contactInfo.phone}
+                  </a>
+                </motion.div>
+              )}
+              {contactInfo?.bookingEmail && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
+                    className="flex items-center space-x-3"
+                  >
+                    <Mail size={16} className="text-[#F79548]" />
+                    <a href={`mailto:${contactInfo.bookingEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+                      {contactInfo.bookingEmail}
+                    </a>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                    className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-2"
+                  >
+                    1-19 guests dining
+                  </motion.div>
+                </>
+              )}
+              {contactInfo?.eventsEmail && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
+                    className="flex items-center space-x-3"
+                  >
+                    <Mail size={16} className="text-[#F79548]" />
+                    <a href={`mailto:${contactInfo.eventsEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+                      {contactInfo.eventsEmail}
+                    </a>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+                    className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-1"
+                  >
+                    20+ guests or private events
+                  </motion.div>
+                </>
+              )}
             </div>
           </motion.div>
 
@@ -263,52 +303,59 @@ const Footer: React.FC = () => {
               Address
             </motion.h4>
             <div className="space-y-3 text-sm">
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                className="flex items-start space-x-3"
-              >
-                <MapPin size={16} className="text-[#F79548] mt-0.5" />
-                <div className="text-[#4E5A48]/70 font-colfax-regular">
-                  <p>R. Castilho 14C 8th Floor</p>
-                  <p>1250-066 Lisboa, Portugal</p>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                className="flex items-center space-x-3"
-              >
-                <Clock size={16} className="text-[#F79548]" />
-                <div className="text-[#4E5A48]/70 font-colfax-regular">
-                  <p>Monday – Sunday</p>
-                  <p>6:00 PM – 2:00 AM</p>
-                </div>
-              </motion.div>
-              <motion.a
-                initial={{ opacity: 0, x: -15 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                href="https://maps.app.goo.gl/47T25VoAgyH1MeNH6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200 text-sm font-colfax-regular inline-flex items-center space-x-2 ml-7"
-              >
-                <span>View on Google Maps</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="15,3 21,3 21,9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </motion.a>
+              {contactInfo?.address && (
+                <motion.div
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                  className="flex items-start space-x-3"
+                >
+                  <MapPin size={16} className="text-[#F79548] mt-0.5" />
+                  <div className="text-[#4E5A48]/70 font-colfax-regular">
+                    <p>{contactInfo.address.street}</p>
+                    <p>{contactInfo.address.postalCode} {contactInfo.address.city}, {contactInfo.address.country}</p>
+                  </div>
+                </motion.div>
+              )}
+              {contactInfo?.hours && (
+                <motion.div
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                  className="flex items-center space-x-3"
+                >
+                  <Clock size={16} className="text-[#F79548]" />
+                  <div className="text-[#4E5A48]/70 font-colfax-regular">
+                    <p>{contactInfo.hours.days}</p>
+                    <p>{contactInfo.hours.hours}</p>
+                  </div>
+                </motion.div>
+              )}
+              {contactInfo?.address?.googleMapsLink && (
+                <motion.a
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+                  href={contactInfo.address.googleMapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#4E5A48]/70 hover:text-[#F79548] transition-colors duration-200 text-sm font-colfax-regular inline-flex items-center space-x-2 ml-7"
+                >
+                  <span>View on Google Maps</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="15,3 21,3 21,9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.a>
+              )}
             </div>
           </motion.div>
-          {/* Legal */}
+
+          {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -333,12 +380,12 @@ const Footer: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
               >
                 <Link 
-                to="/careers" 
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors block font-colfax-regular"
-              >
-                Careers
-              </Link>
+                  to="/careers" 
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors block font-colfax-regular"
+                >
+                  Careers
+                </Link>
               </motion.div>
               <motion.button
                 initial={{ opacity: 0, x: -15 }}

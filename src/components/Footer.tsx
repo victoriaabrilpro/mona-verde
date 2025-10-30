@@ -201,89 +201,89 @@ const Footer: React.FC = () => {
           </motion.div>
 
           {/* Contact */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
-            className="space-y-4"
-          >
-            <motion.h4
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
-              className="text-lg font-pp-haton text-[#4E5A48]"
-            >
-              Contact
-            </motion.h4>
-            <div className="space-y-3 text-sm">
-              {contactInfo?.phone && (
-                <motion.div
-                  initial={{ opacity: 0, x: -15 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
-                  className="flex items-center space-x-3"
-                >
-                  <Phone size={16} className="text-[#F79548]" />
-                  <a href={`tel:${contactInfo.phone}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                    {contactInfo.phone}
-                  </a>
-                </motion.div>
-              )}
-              {contactInfo?.bookingEmail && (
-                <>
-                  <motion.div
-                    initial={{ opacity: 0, x: -15 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
-                    className="flex items-center space-x-3"
-                  >
-                    <Mail size={16} className="text-[#F79548]" />
-                    <a href={`mailto:${contactInfo.bookingEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                      {contactInfo.bookingEmail}
-                    </a>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: -15 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                    className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-2"
-                  >
-                    1-19 guests dining
-                  </motion.div>
-                </>
-              )}
-              {contactInfo?.eventsEmail && (
-                <>
-                  <motion.div
-                    initial={{ opacity: 0, x: -15 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
-                    className="flex items-center space-x-3"
-                  >
-                    <Mail size={16} className="text-[#F79548]" />
-                    <a href={`mailto:${contactInfo.eventsEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
-                      {contactInfo.eventsEmail}
-                    </a>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, x: -15 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                    className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-1"
-                  >
-                    20+ guests or private events
-                  </motion.div>
-                </>
-              )}
-            </div>
-          </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+  className="space-y-4"
+>
+  <motion.h4
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
+    className="text-lg font-pp-haton text-[#4E5A48]"
+  >
+    Contact
+  </motion.h4>
+  <div className="space-y-2 text-sm">
+    {contactInfo?.phone && (
+      <motion.div
+        initial={{ opacity: 0, x: -15 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
+        className="flex items-center space-x-3"
+      >
+        <Phone size={16} className="text-[#F79548]" />
+        <a href={`tel:${contactInfo.phone}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+          {contactInfo.phone}
+        </a>
+      </motion.div>
+    )}
+    {contactInfo?.bookingEmail && (
+      <>
+        <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
+          className="flex items-center space-x-3"
+        >
+          <Mail size={16} className="text-[#F79548]" />
+          <a href={`mailto:${contactInfo.bookingEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+            {contactInfo.bookingEmail}
+          </a>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+          className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-1"
+        >
+          1-19 guests dining
+        </motion.div>
+      </>
+    )}
+    {contactInfo?.eventsEmail && (
+      <>
+        <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
+          className="flex items-center space-x-3 mt-1"
+        >
+          <Mail size={16} className="text-[#F79548]" />
+          <a href={`mailto:${contactInfo.eventsEmail}`} className="text-[#4E5A48]/70 hover:text-[#4E5A48] transition-colors font-colfax-regular">
+            {contactInfo.eventsEmail}
+          </a>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+          className="text-xs text-[#4E5A48]/50 ml-7 font-colfax-regular -mt-1"
+        >
+          20+ guests or private events
+        </motion.div>
+      </>
+    )}
+  </div>
+</motion.div>
 
           {/* Address */}
           <motion.div

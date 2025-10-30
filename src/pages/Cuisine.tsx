@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Volume2, VolumeX } from 'lucide-react';
 import { useCuisinePage } from '../hooks/useSanity';
 import { urlFor } from '../lib/sanity';
+import Player from '@vimeo/player';
 
 const CuisineCarousel: React.FC<{ images?: any[] }> = ({ images }) => {
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   
   const defaultImages = [
     'https://lh3.googleusercontent.com/pw/AP1GczMA92bWvPOy6sejaKvpvvZ6ZRX2kiqlPHM4MMTZBDXc8GxjLZejH9DZu6YkM_9K9xa3UNrsAvC-kLlZHL9RwyG-ycynjn4oPNewiQ_QHlSf21fPPZ-zbJk-dSlNqsR8p7FlqePUTHWnkw1TaIN0YLJr=w1338-h2008-s-no-gm?authuser=1',
@@ -19,7 +20,7 @@ const CuisineCarousel: React.FC<{ images?: any[] }> = ({ images }) => {
     ? images.map(img => urlFor(img).width(600).url())
     : defaultImages;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % displayImages.length);
     }, 2500);
@@ -67,6 +68,71 @@ const CuisineCarousel: React.FC<{ images?: any[] }> = ({ images }) => {
 
 const Cuisine: React.FC = () => {
   const { data: cuisineData, loading } = useCuisinePage();
+  const videoRef = useRef<HTMLIFrameElement>(null);
+  const playerRef = useRef<Player | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const videoUrl = cuisineData?.videoUrl || "https://player.vimeo.com/video/1105559695?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0";
+  const menuLink = cuisineData?.menuLink || "https://qr.finedinemenu.com/mona-verde/menu/67d054ad3dcba5e21e2bfae5";
+
+  useEffect(() => {
+    // Small delay to ensure iframe is in DOM
+    const timer = setTimeout(() => {
+      if (videoRef.current && !playerRef.current) {
+        try {
+          const player = new Player(videoRef.current);
+          playerRef.current = player;
+          
+          // Wait for the player to be ready before setting up audio controls
+          player.ready().then(() => {
+            return player.setMuted(true);
+          }).then(() => {
+            setIsMuted(true);
+          }).catch(err => {
+            console.error('Error initializing player:', err);
+          });
+
+          // Also listen for play event to ensure video is playing
+          player.on('play', () => {
+            player.getMuted().then(muted => {
+              setIsMuted(muted);
+            });
+          });
+        } catch (err) {
+          console.error('Error creating player:', err);
+        }
+      }
+    }, 100);
+
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      if (playerRef.current) {
+        playerRef.current.off('play');
+        playerRef.current.destroy();
+        playerRef.current = null;
+      }
+    };
+  }, [videoUrl]);
+
+  // Toggle mute function
+  const toggleMute = async () => {
+    if (!playerRef.current) {
+      console.log('Player not ready yet');
+      return;
+    }
+    
+    try {
+      const newMutedState = !isMuted;
+      await playerRef.current.setMuted(newMutedState);
+      // Verify the mute state was actually changed
+      const actualMutedState = await playerRef.current.getMuted();
+      setIsMuted(actualMutedState);
+      console.log('Muted state:', actualMutedState);
+    } catch (err) {
+      console.error('Error toggling mute:', err);
+    }
+  };
 
   // Show loading state
   if (loading) {
@@ -77,9 +143,6 @@ const Cuisine: React.FC = () => {
     );
   }
 
-  const videoUrl = cuisineData?.videoUrl || "https://player.vimeo.com/video/1105559695?autoplay=1&loop=1&background=1&title=0&byline=0&portrait=0";
-  const menuLink = cuisineData?.menuLink || "https://qr.finedinemenu.com/mona-verde/menu/67d054ad3dcba5e21e2bfae5";
-
   return (
     <div className="min-h-screen bg-[#4E5A48] overflow-hidden">
       {/* Video Hero Section */}
@@ -87,6 +150,7 @@ const Cuisine: React.FC = () => {
         {/* Video Background */}
         <div className="absolute inset-0 w-full h-full">
           <iframe
+            ref={videoRef}
             src={videoUrl}
             className="absolute inset-0 w-full h-full scale-150 sm:scale-125 lg:scale-100"
             style={{ 
@@ -104,6 +168,14 @@ const Cuisine: React.FC = () => {
           ></iframe>
           <div className="absolute inset-0 bg-gradient-to-b from-[#4E5A48]/40 via-transparent to-[#4E5A48]/60" style={{ top: '-10%', height: '120%' }}></div>
         </div>
+        
+        <button
+          onClick={toggleMute}
+          className="absolute z-20 bottom-8 right-8 w-12 h-12 rounded-full bg-black/30 text-white flex items-center justify-center backdrop-blur-sm transition-opacity hover:opacity-80"
+          aria-label={isMuted ? "Activer le son" : "Couper le son"}
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+        </button>
 
         {/* Content Overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
@@ -250,7 +322,6 @@ const Cuisine: React.FC = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

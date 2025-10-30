@@ -2,12 +2,12 @@ import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'contactInfo',
-  title: 'Contact Information',
+  title: 'Site Information',
   type: 'document',
   fields: [
     defineField({
       name: 'logo',
-      title: 'Footer Logo',
+      title: 'Footer/header Logo',
       type: 'image',
       options: { hotspot: true },
       description: 'Logo displayed in the footer',
@@ -77,7 +77,7 @@ export default defineType({
     },
     prepare({ title, subtitle, media }) {
       return {
-        title: 'Contact Information',
+        title: 'Site Information',
         subtitle: title || subtitle || 'Footer & Contact Details',
         media: media,
       }

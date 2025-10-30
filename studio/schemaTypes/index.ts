@@ -9,7 +9,7 @@ import careersPage from './careersPage'
 import reservationPage from './reservationPage'
 
 export const schemaTypes = [
-  partner,
+  
   heroSection,
   contactInfo,
   eventsPage, // Changed from 'event' to 'eventsPage'
@@ -18,4 +18,5 @@ export const schemaTypes = [
   homePage,
   careersPage,
   reservationPage,
+  partner,
 ]

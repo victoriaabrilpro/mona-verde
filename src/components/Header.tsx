@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { client, urlFor, queries } from '../lib/sanity';
+import type { ContactInfo } from '../types/sanity';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,10 +20,23 @@ const Header: React.FC = () => {
     { id: 'events', label: 'EVENTS', path: '/events' },
   ];
 
+  // Fetch contact info for logo and Instagram
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const data = await client.fetch<ContactInfo>(queries.contactInfo);
+        setContactInfo(data);
+      } catch (error) {
+        console.error('Error fetching contact info:', error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
   const handleNavigation = (path: string) => {
     setIsMenuOpen(false);
     navigate(path);
-    // remet en haut si besoin
     requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }));
   };
 
@@ -36,7 +52,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Gérer le filtre flou sur le contenu
   useEffect(() => {
     const mainContent = document.querySelector('main');
     const footer = document.querySelector('footer');
@@ -83,7 +98,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {/* HEADER au-dessus du contenu, mais plus bas que le drawer si besoin */}
+      {/* HEADER */}
       <header
         className={`fixed top-0 left-0 right-0 transition-all duration-300 h-16 ${
           shouldShowBackground ? 'bg-[#4E5A48]/90 backdrop-blur-lg' : 'bg-transparent'
@@ -107,29 +122,39 @@ const Header: React.FC = () => {
             {/* Logo */}
             <div className="absolute left-1/2 -translate-x-1/2 h-full flex items-center">
               <button onClick={(e) => handleClick(e, '/')} className="text-2xl font-bold tracking-wide">
-                <img
-                  src="https://lh3.googleusercontent.com/pw/AP1GczNASSit0Sy3aqz1b9VrAl5qZKCdaifXgZYs3k-3nL2kMT90pbQf-3iE6nW00AWUn8GJdy2QW1jno3KZixto_jV3xDT8vjdMLHIk4YglYHNoXnccJZfjj546aSkuVhV5w-akjJHay0Hr44rFNaQTXrf6=w1919-h1365-s-no-gm?authuser=1"
-                  alt="Mona Verde Logo"
-                  className="h-8 w-auto"
-                />
+                {contactInfo?.logo ? (
+                  <img
+                    src={urlFor(contactInfo.logo).width(400).url()}
+                    alt="Mona Verde Logo"
+                    className="h-8 w-auto"
+                  />
+                ) : (
+                  <img
+                    src="https://lh3.googleusercontent.com/pw/AP1GczNASSit0Sy3aqz1b9VrAl5qZKCdaifXgZYs3k-3nL2kMT90pbQf-3iE6nW00AWUn8GJdy2QW1jno3KZixto_jV3xDT8vjdMLHIk4YglYHNoXnccJZfjj546aSkuVhV5w-akjJHay0Hr44rFNaQTXrf6=w1919-h1365-s-no-gm?authuser=1"
+                    alt="Mona Verde Logo"
+                    className="h-8 w-auto"
+                  />
+                )}
               </button>
             </div>
 
             {/* Instagram */}
-            <a
-              href="https://www.instagram.com/monaverdelisboa/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white hover:text-[#F79548] transition-colors duration-200 h-full flex items-center"
-              aria-label="Instagram"
-            >
-              <Instagram size={24} />
-            </a>
+            {contactInfo?.socialMedia?.instagram && (
+              <a
+                href={contactInfo.socialMedia.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#F79548] transition-colors duration-200 h-full flex items-center"
+                aria-label="Instagram"
+              >
+                <Instagram size={24} />
+              </a>
+            )}
           </div>
         </div>
       </header>
 
-      {/* DRAWER — aucun overlay, largeur fixe */}
+      {/* DRAWER */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.aside
@@ -140,7 +165,7 @@ const Header: React.FC = () => {
             transition={{ type: 'spring', damping: 26, stiffness: 300 }}
             className="fixed top-0 left-0 h-screen w-[320px] max-w-[90vw] flex flex-col overflow-hidden shadow-xl"
             style={{
-              zIndex: 30,               // au-dessus du header (20) mais sans overlay
+              zIndex: 30,
               backgroundColor: '#4E5A48',
               backgroundImage:
                 "url('https://lh3.googleusercontent.com/pw/AP1GczOWd4lVpGAh6t7Qm_ye-keKUDtf0amqbFAWr8B4TkecpmrR0jKHWjkoHjHFQAEhXi4eYQ_bNOoAQGuP9XAY7BxuorBM3J3pYr_6JguHnUsjd0taCnltKxl7lp2p9rWxJnM9ZxmW330HBNjCOd8BoSuZ=w896-h1600-s-no-gm?authuser=1')",
@@ -153,7 +178,7 @@ const Header: React.FC = () => {
             aria-label="Main menu"
             id="drawer"
           >
-            {/* Voile interne pour la lisibilité */}
+            {/* Overlay */}
             <div className="absolute inset-0 bg-[#4E5A48]/80 z-0" />
 
             {/* Close */}
@@ -167,7 +192,7 @@ const Header: React.FC = () => {
               </button>
             </div>
 
-            {/* Liens */}
+            {/* Navigation Links */}
             <div className="flex-1 flex flex-col justify-center px-6 relative z-10">
               <nav className="space-y-6">
                 {navigationItems.map((item, i) => (

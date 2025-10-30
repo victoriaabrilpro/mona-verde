@@ -157,7 +157,18 @@ const Header: React.FC = () => {
       {/* DRAWER */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.aside
+          <>
+            {/* Overlay to close menu when clicking outside */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/40"
+              style={{ zIndex: 25 }}
+              onClick={() => setIsMenuOpen(false)}
+            />
+            
+            <motion.aside
             key="drawer"
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
@@ -212,6 +223,7 @@ const Header: React.FC = () => {
               </nav>
             </div>
           </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </>

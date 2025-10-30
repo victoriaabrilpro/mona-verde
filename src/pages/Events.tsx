@@ -56,16 +56,14 @@ const Events: React.FC = () => {
   const displayEvents = events.length > 0 ? events : defaultEvents;
 
   return (
-    <div className="min-h-screen bg-[#4E5A48]">
+    <div className="bg-white">
       {/* Hero Section */}
       <section className="pt-20 pb-4 md:pt-24 md:pb-6 bg-white">
-        
         <div className="max-w-6xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className=""
           >
             <h1 className="text-5xl md:text-6xl font-bold text-[#4E5A48] mb-8 tracking-wide" style={{ fontFamily: 'serif' }}>
             </h1>
@@ -83,7 +81,7 @@ const Events: React.FC = () => {
 
       {/* Events Banner */}
       <section className="pt-2 pb-8 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6 pb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayEvents.map((event, index) => {
               // Get image URL - either from Sanity or use default
@@ -127,6 +125,8 @@ const Events: React.FC = () => {
         </div>
       </section>
 
+      {/* Reduced Green Space */}
+      <section className="h-16 md:h-20 bg-[#4E5A48]"></section>
     </div>
   );
 };

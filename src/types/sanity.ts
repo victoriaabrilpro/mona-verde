@@ -151,3 +151,47 @@ export interface ReservationPage {
     description: string
   }>
 }
+
+// Privacy Policy & Terms
+export interface ContentBlock {
+  type: 'paragraph' | 'subheading' | 'list'
+  text?: string
+  items?: string[]
+}
+
+export interface LegalSection {
+  heading: string
+  content: ContentBlock[]
+}
+
+export interface PrivacyPolicy {
+  _id: string
+  _type: 'privacyPolicy'
+  title: string
+  subtitle: string
+  introduction: string
+  sections: LegalSection[]
+  contactAddress: {
+    line1: string
+    line2: string
+    line3: string
+  }
+  acknowledgment: string
+  lastUpdated?: string
+}
+
+export interface TermsOfService {
+  _id: string
+  _type: 'termsOfService'
+  title: string
+  subtitle: string
+  introduction: string
+  sections: LegalSection[]
+  contactAddress: {
+    line1: string
+    line2: string
+    line3: string
+  }
+  acknowledgment: string
+  lastUpdated?: string
+}

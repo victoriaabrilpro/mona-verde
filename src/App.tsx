@@ -9,6 +9,7 @@ import Cuisine from './pages/Cuisine';
 import Reservation from './pages/Reservation';
 import Events from './pages/Events';
 import Careers from './pages/Careers';
+import Studio from './pages/Studio'
 
 function App() {
   const [isReservationOpen, setIsReservationOpen] = React.useState(false);
@@ -25,6 +26,7 @@ function App() {
             <Route path="/reservation" element={<Reservation />} />
             <Route path="/events" element={<Events />} />
             <Route path="/careers" element={<Careers />} />
+            <Route path="/studio/*" element={<Studio />} />
           </Routes>
         </main>
         <Footer />

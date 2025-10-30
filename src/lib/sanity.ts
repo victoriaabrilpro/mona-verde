@@ -85,5 +85,24 @@ export const queries = {
     bookingSection,
     eventsSection,
     eventTypes
-  }`
+  }`,
+  privacyPolicy: `*[_type == "privacyPolicy"][0] {
+  title,
+  subtitle,
+  introduction,
+  sections,
+  contactAddress,
+  acknowledgment,
+  lastUpdated
+}`,
+
+termsOfService: `*[_type == "termsOfService"][0] {
+  title,
+  subtitle,
+  introduction,
+  sections,
+  contactAddress,
+  acknowledgment,
+  lastUpdated
+}`,
 }

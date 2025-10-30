@@ -7,6 +7,8 @@ import cuisinePage from './cuisinePage'
 import homePage from './homePage'
 import careersPage from './careersPage'
 import reservationPage from './reservationPage'
+import privacyPolicy from './privacyPolicy'
+import termsOfService from './termsOfService'
 
 export const schemaTypes = [
   
@@ -19,4 +21,6 @@ export const schemaTypes = [
   careersPage,
   reservationPage,
   partner,
+  privacyPolicy,
+  termsOfService
 ]

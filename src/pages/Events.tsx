@@ -10,7 +10,7 @@ const Events: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#4E5A48] flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg"></div>
       </div>
     );
   }

@@ -115,7 +115,7 @@ const TermsOfServiceModal: React.FC<TermsOfServiceModalProps> = ({ isOpen, onClo
             <div className="flex-1 overflow-y-auto p-6 md:p-8">
               {loading ? (
                 <div className="max-w-4xl mx-auto text-center py-12">
-                  <p className="text-[#4E5A48]/60">Loading...</p>
+                  <p className="text-[#4E5A48]/60"></p>
                 </div>
               ) : termsData ? (
                 <div className="max-w-4xl mx-auto space-y-8">

@@ -18,11 +18,12 @@ const Footer: React.FC = () => {
     const fetchData = async () => {
       try {
         const [partnersData, contactData] = await Promise.all([
-          client.fetch<Partner[]>(queries.partners),
+          client.fetch(queries.partnersSection),
           client.fetch<ContactInfo>(queries.contactInfo)
         ]);
         
-        setPartners(partnersData);
+        // Extract partners array from partnersSection
+        setPartners(partnersData?.partners || []);
         setContactInfo(contactData);
         setLoading(false);
       } catch (error) {
@@ -64,7 +65,7 @@ const Footer: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.05 * index, ease: "easeOut" }}
-                  key={partner._id}
+                  key={partner._key || index}
                   className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                   style={{ 
                     minWidth: '128px', 
@@ -85,9 +86,9 @@ const Footer: React.FC = () => {
             <div className="md:hidden overflow-hidden">
               <div className="flex items-center gap-8 animate-scroll">
                 {/* First set of logos */}
-                {partners.map((partner) => (
+                {partners.map((partner, index) => (
                   <div
-                    key={`first-${partner._id}`}
+                    key={`first-${partner._key || index}`}
                     className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                     style={{ 
                       minWidth: '128px', 
@@ -103,9 +104,9 @@ const Footer: React.FC = () => {
                   </div>
                 ))}
                 {/* Duplicate set for seamless loop */}
-                {partners.map((partner) => (
+                {partners.map((partner, index) => (
                   <div
-                    key={`second-${partner._id}`}
+                    key={`second-${partner._key || index}`}
                     className="flex-shrink-0 flex items-center justify-center w-32 h-16"
                     style={{ 
                       minWidth: '128px', 

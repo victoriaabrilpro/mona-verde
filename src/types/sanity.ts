@@ -13,13 +13,20 @@ export interface SanityImage {
   }
 }
 
-// Partner
+// Partner (object inside Partners Section)
 export interface Partner {
-  _id: string
-  _type: 'partner'
+  _key?: string
   name: string
   logo: SanityImage
   order?: number
+}
+
+// Partners Section (NEW - replaces individual Partner documents)
+export interface PartnersSection {
+  _id: string
+  _type: 'partnersSection'
+  sectionTitle?: string
+  partners?: Partner[]
 }
 
 // Hero Section

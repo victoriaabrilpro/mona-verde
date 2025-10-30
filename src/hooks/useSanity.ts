@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { client, queries } from '../lib/sanity'
 import type {
-  Partner,
+  PartnersSection,
   HeroSection,
   ContactInfo,
   EventsPage,
@@ -35,7 +35,7 @@ export function useSanityData<T>(query: string) {
 
 // Specific hooks for each content type with proper typing
 export function usePartners() {
-  return useSanityData<Partner[]>(queries.partners)
+  return useSanityData<PartnersSection[]>(queries.partnersSection)
 }
 
 export function useHeroSection() {

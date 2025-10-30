@@ -16,11 +16,15 @@ export function urlFor(source: any) {
 
 // Sanity queries
 export const queries = {
-  partners: `*[_type == "partner"] | order(order asc) {
+  partnersSection: `*[_type == "partnersSection"][0] {
     _id,
-    name,
-    logo,
-    order
+    sectionTitle,
+    partners[] {
+      _key,
+      name,
+      logo,
+      order
+    } | order(order asc)
   }`,
   
   heroSection: `*[_type == "heroSection"][0] {

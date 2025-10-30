@@ -1,4 +1,4 @@
-import partner from './partner'
+import partnersSection from './partnersSection'
 import heroSection from './heroSection'
 import contactInfo from './contactInfo'
 import eventsPage from './eventsPage' // Changed from 'event' to 'eventsPage'
@@ -20,7 +20,7 @@ export const schemaTypes = [
   homePage,
   careersPage,
   reservationPage,
-  partner,
+  partnersSection,
   privacyPolicy,
   termsOfService
 ]

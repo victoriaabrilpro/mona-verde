@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 const Studio = () => {
   useEffect(() => {
     // Redirect to your deployed Sanity Studio
-    window.location.href = 'https://mona-verde-cms.sanity.studio/'; // Change this to your actual studio URL
+    window.location.href = 'https://mona-verde-cms.sanity.studio'; // Change this to your actual studio URL
   }, []);
 
   return (

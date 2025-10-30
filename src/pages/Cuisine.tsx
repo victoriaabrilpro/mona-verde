@@ -77,7 +77,7 @@ const Cuisine: React.FC = () => {
     );
   }
 
-  const videoUrl = cuisineData?.videoUrl || "https://player.vimeo.com/video/1105559695?autoplay=1&loop=1&controls=0&title=0&byline=0&portrait=0";
+  const videoUrl = cuisineData?.videoUrl || "https://player.vimeo.com/video/1105559695?autoplay=1&loop=1&background=1&title=0&byline=0&portrait=0";
   const menuLink = cuisineData?.menuLink || "https://qr.finedinemenu.com/mona-verde/menu/67d054ad3dcba5e21e2bfae5";
 
   return (

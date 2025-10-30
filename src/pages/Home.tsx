@@ -115,11 +115,20 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
             <h1 className="text-5xl md:text-7xl font-canela mb-6">
-              <img 
-                src="https://lh3.googleusercontent.com/pw/AP1GczOy35JogbFRFbCYBP0iRILF0THMmssKTUWlXbwv8w30dZJ9kZT_QZV5K2BcMHGHMdognMbgwF7y34C1mQGU27MvnNNFLNsfBmdVRjX5cuYUPVaXAx-F0zkoxff1bLYGGETHdXvLmqCE2xrNx9ShqDRH=w2083-h938-s-no-gm?authuser=1"
-                alt="Mona Verde"
-                className="h-14 md:h-20 w-auto mx-auto -mt-6"
-              />
+              
+                {heroData?.logo ? (
+                  <img 
+                    src={urlFor(heroData.logo).width(400).url()}
+                    alt="Mona Verde"
+                    className="h-14 md:h-20 w-auto mx-auto -mt-6"
+                  />
+                ) : (
+                  <img 
+                    src="https://lh3.googleusercontent.com/pw/AP1GczOy35JogbFRFbCYBP0iRILF0THMmssKTUWlXbwv8w30dZJ9kZT_QZV5K2BcMHGHMdognMbgwF7y34C1mQGU27MvnNNFLNsfBmdVRjX5cuYUPVaXAx-F0zkoxff1bLYGGETHdXvLmqCE2xrNx9ShqDRH=w2083-h938-s-no-gm?authuser=1"
+                    alt="Mona Verde"
+                    className="h-14 md:h-20 w-auto mx-auto -mt-6"
+                  />
+                )}
             </h1>
             <p className="text-lg md:text-xl mb-8 font-canela tracking-widest uppercase">
               <span className="text-sm md:text-xl">{heroData?.tagline || 'CELEBRATE · CONNECT · EXPERIENCE'}</span>

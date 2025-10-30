@@ -6,6 +6,7 @@ import aboutPage from './aboutPage'
 import cuisinePage from './cuisinePage'
 import homePage from './homePage'
 import careersPage from './careersPage'
+import reservationPage from './reservationPage'
 
 export const schemaTypes = [
   partner,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   cuisinePage,
   homePage,
   careersPage,
+  reservationPage,
 ]

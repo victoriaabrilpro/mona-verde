@@ -9,6 +9,7 @@ import type {
   CuisinePage,
   HomePage,
   CareersPage,
+  ReservationPage,
 } from '../types/sanity'
 
 export function useSanityData<T>(query: string) {
@@ -63,4 +64,8 @@ export function useHomePage() {
 
 export function useCareersPage() {
   return useSanityData<CareersPage>(queries.careersPage)
+}
+
+export function useReservationPage() {
+  return useSanityData<ReservationPage>(queries.reservationPage)
 }

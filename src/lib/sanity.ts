@@ -24,19 +24,22 @@ export const queries = {
   }`,
   
   heroSection: `*[_type == "heroSection"][0] {
-    images,
-    tagline
-  }`,
+  logo,
+  images,
+  tagline
+}`,
   
   contactInfo: `*[_type == "contactInfo"][0] {
-    phone,
-    bookingEmail,
-    eventsEmail,
-    jobsEmail,
-    address,
-    hours,
-    socialMedia
-  }`,
+  logo,
+  description,
+  phone,
+  bookingEmail,
+  eventsEmail,
+  jobsEmail,
+  address,
+  hours,
+  socialMedia
+}`,
   
   eventsPage: `*[_type == "eventsPage"][0] {
   _id,
@@ -77,5 +80,10 @@ export const queries = {
     linkedInUrl,
     mainImage,
     benefits
+  }`,
+  reservationPage: `*[_type == "reservationPage"][0] {
+    bookingSection,
+    eventsSection,
+    eventTypes
   }`
 }

@@ -6,6 +6,19 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'logo',
+      title: 'Footer Logo',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Logo displayed in the footer',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Footer Description',
+      type: 'text',
+      description: 'Short description displayed under the logo in footer',
+    }),
+    defineField({
       name: 'phone',
       title: 'Phone Number',
       type: 'string',
@@ -56,4 +69,18 @@ export default defineType({
       ],
     }),
   ],
+  preview: {
+    select: {
+      title: 'phone',
+      subtitle: 'address.street',
+      media: 'logo',
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title: 'Contact Information',
+        subtitle: title || subtitle || 'Footer & Contact Details',
+        media: media,
+      }
+    },
+  },
 })

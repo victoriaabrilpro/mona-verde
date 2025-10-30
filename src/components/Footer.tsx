@@ -156,7 +156,7 @@ const Footer: React.FC = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              src="https://lh3.googleusercontent.com/pw/AP1GczNASSit0Sy3aqz1b9VrAl5qZKCdaifXgZYs3k-3nL2kMT90pbQf-3iE6nW00AWUn8GJdy2QW1jno3KZixto_jV3xDT8vjdMLHIk4YglYHNoXnccJZfjj546aSkuVhV5w-akjJHay0Hr44rFNaQTXrf6=w1919-h1365-s-no-gm?authuser=1"
+              src={contactInfo?.logo ? urlFor(contactInfo.logo).width(400).url() : "https://lh3.googleusercontent.com/pw/AP1GczNASSit0Sy3aqz1b9VrAl5qZKCdaifXgZYs3k-3nL2kMT90pbQf-3iE6nW00AWUn8GJdy2QW1jno3KZixto_jV3xDT8vjdMLHIk4YglYHNoXnccJZfjj546aSkuVhV5w-akjJHay0Hr44rFNaQTXrf6=w1919-h1365-s-no-gm?authuser=1"}
               alt="Mona Verde Logo"
               className="h-12 w-auto"
             />
@@ -167,8 +167,7 @@ const Footer: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               className="text-[#4E5A48]/70 text-sm leading-relaxed font-colfax-regular"
             >
-              Our rooftop restaurant sits on the 8th floor in central Lisbon.
-              Part of the Mona Experience Group family.
+              {contactInfo?.description || "Our rooftop restaurant sits on the 8th floor in central Lisbon. Part of the Mona Experience Group family."}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 15 }}

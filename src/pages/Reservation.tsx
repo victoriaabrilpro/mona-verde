@@ -1,10 +1,45 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Calendar, Users } from 'lucide-react';
+import { Mail, Calendar } from 'lucide-react';
 import ReservationWidget from '../components/ReservationWidget';
+import { useReservationPage, useContactInfo } from '../hooks/useSanity';
+import { urlFor } from '../lib/sanity';
 
 const Reservation: React.FC = () => {
   const [isReservationOpen, setIsReservationOpen] = React.useState(false);
+  const { data: reservationData, loading: reservationLoading } = useReservationPage();
+  const { data: contactData, loading: contactLoading } = useContactInfo();
+
+  // Show loading state
+  if (reservationLoading || contactLoading) {
+    return (
+      <div className="min-h-screen bg-[#4E5A48] flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  const bookingSection = reservationData?.bookingSection;
+  const eventsSection = reservationData?.eventsSection;
+  const eventTypes = reservationData?.eventTypes || [];
+
+  // Default event types
+  const defaultEventTypes = [
+    {
+      title: 'Corporate',
+      description: 'Professional gatherings, business dinners, and networking events with panoramic city views.'
+    },
+    {
+      title: 'Celebrations',
+      description: 'Birthday parties, anniversaries, and milestone celebrations in our exclusive rooftop setting.'
+    },
+    {
+      title: 'Special Events',
+      description: 'Themed dinners, wine tastings, and exclusive culinary experiences with our chef.'
+    }
+  ];
+
+  const displayEventTypes = eventTypes.length > 0 ? eventTypes : defaultEventTypes;
 
   return (
     <div className="min-h-screen bg-[#4E5A48] overflow-x-hidden">
@@ -27,25 +62,42 @@ const Reservation: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48] mb-8"
               >
-                BOOK YOUR<br />EXPERIENCE
+                {bookingSection?.title ? bookingSection.title.split(' ').slice(0, 2).join(' ') : 'BOOK YOUR'}<br />
+                {bookingSection?.title ? bookingSection.title.split(' ').slice(2).join(' ') : 'EXPERIENCE'}
               </motion.h2>
               <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                >
-                  Book a table with us and get ready for something special. Our rooftop is perfect for date nights, business dinners, or any time you want to celebrate life a little.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                >
-                  We suggest booking ahead to get your favorite time and spot. Just let us know about any dietary needs or special requests, we're happy to help.
-                </motion.p>
+                {bookingSection?.paragraphs && bookingSection.paragraphs.length > 0 ? (
+                  bookingSection.paragraphs.map((paragraph, index) => (
+                    <motion.p
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ))
+                ) : (
+                  <>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      Book a table with us and get ready for something special. Our rooftop is perfect for date nights, business dinners, or any time you want to celebrate life a little.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    >
+                      We suggest booking ahead to get your favorite time and spot. Just let us know about any dietary needs or special requests, we're happy to help.
+                    </motion.p>
+                  </>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -72,10 +124,10 @@ const Reservation: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0">
                     <span className="text-sm sm:text-base">Questions? Contact us at</span>
                     <a 
-                    href="mailto:booking@monaexperience.com" 
+                      href={`mailto:${contactData?.bookingEmail || 'booking@monaexperience.com'}`}
                       className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300 text-sm sm:text-base break-all sm:ml-1"
                     >
-                      booking@monaexperience.com
+                      {contactData?.bookingEmail || 'booking@monaexperience.com'}
                     </a>
                   </div>
                 </motion.div>
@@ -91,7 +143,7 @@ const Reservation: React.FC = () => {
             >
               <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden">
                 <img
-                  src="https://lh3.googleusercontent.com/pw/AP1GczNb4PLuygeKoIERnj5pS64_MzFejUXFxWssuBrHeFfUC2AgwJON1Ib9Dv__KHlAoAd0QQmEB5gLKJvYWL9x3z2R75ok5JiNN7K3-yDPLz71SAhe-prLttGwoiGp47s4vGCvnk-1dgIVokNMeLxOGIkV=w1590-h2008-s-no-gm?authuser=1"
+                  src={bookingSection?.image ? urlFor(bookingSection.image).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczNb4PLuygeKoIERnj5pS64_MzFejUXFxWssuBrHeFfUC2AgwJON1Ib9Dv__KHlAoAd0QQmEB5gLKJvYWL9x3z2R75ok5JiNN7K3-yDPLz71SAhe-prLttGwoiGp47s4vGCvnk-1dgIVokNMeLxOGIkV=w1590-h2008-s-no-gm?authuser=1"}
                   alt="Rooftop Dining"
                   className="w-full h-full object-cover"
                 />
@@ -114,7 +166,7 @@ const Reservation: React.FC = () => {
             >
               <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden">
                 <img
-                  src="https://lh3.googleusercontent.com/pw/AP1GczNim40CHz01du_o8nqahaVs_9XtuSZTtdzBYFoLSs9WyEwFD_lfcBKovTTsXL9y6FALqWLiPyP7TQHCQYuVelLrj3X0ImuCCxnMCFIpnBFYWc9A5fSTVTe4nuSV6-c_VQddDEBhwAZqaI5CpADn9q34=w1338-h2008-s-no-gm?authuser=1"
+                  src={eventsSection?.image ? urlFor(eventsSection.image).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczNim40CHz01du_o8nqahaVs_9XtuSZTtdzBYFoLSs9WyEwFD_lfcBKovTTsXL9y6FALqWLiPyP7TQHCQYuVelLrj3X0ImuCCxnMCFIpnBFYWc9A5fSTVTe4nuSV6-c_VQddDEBhwAZqaI5CpADn9q34=w1338-h2008-s-no-gm?authuser=1"}
                   alt="Private Events"
                   className="w-full h-full object-cover"
                 />
@@ -135,25 +187,41 @@ const Reservation: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48] mb-8"
               >
-                EVENT AND PRIVATIZATION
+                {eventsSection?.title || 'EVENT AND PRIVATIZATION'}
               </motion.h2>
               <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6">
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                >
-                  Planning something special? Our rooftop makes any occasion feel extraordinary: whether it's a corporate event, private party, or celebrating a big milestone.
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                >
-                  From small, intimate gatherings to big celebrations, our events team works with you to create exactly what you're dreaming of, with custom menus and service that's all about you.
-                </motion.p>
+                {eventsSection?.paragraphs && eventsSection.paragraphs.length > 0 ? (
+                  eventsSection.paragraphs.map((paragraph, index) => (
+                    <motion.p
+                      key={index}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      {paragraph}
+                    </motion.p>
+                  ))
+                ) : (
+                  <>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      Planning something special? Our rooftop makes any occasion feel extraordinary: whether it's a corporate event, private party, or celebrating a big milestone.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    >
+                      From small, intimate gatherings to big celebrations, our events team works with you to create exactly what you're dreaming of, with custom menus and service that's all about you.
+                    </motion.p>
+                  </>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -168,10 +236,10 @@ const Reservation: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0">
                     <span className="text-sm sm:text-base">Events inquiries:</span>
                     <a 
-                    href="mailto:events@monaexperience.com" 
+                      href={`mailto:${contactData?.eventsEmail || 'events@monaexperience.com'}`}
                       className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300 text-sm sm:text-base break-all sm:ml-1"
                     >
-                      events@monaexperience.com
+                      {contactData?.eventsEmail || 'events@monaexperience.com'}
                     </a>
                   </div>
                 </motion.div>
@@ -197,92 +265,37 @@ const Reservation: React.FC = () => {
         {/* Content with relative positioning */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full flex items-center justify-center">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto relative z-10 w-full">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center text-center space-y-6 px-4"
-            >
-              <div className="space-y-4 flex flex-col items-center justify-center h-full">
-                <motion.h3
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-                  className="text-2xl font-bold text-white tracking-wide"
-                >
-                  Corporate
-                </motion.h3>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                  className="text-white/90 leading-relaxed font-colfax-regular max-w-xs"
-                >
-                  Professional gatherings, business dinners, and networking events with panoramic city views.
-                </motion.p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center text-center space-y-6 px-4"
-            >
-              <div className="space-y-4 flex flex-col items-center justify-center h-full">
-                <motion.h3
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                  className="text-2xl font-bold text-white tracking-wide"
-                >
-                  Celebrations
-                </motion.h3>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                  className="text-white/90 leading-relaxed font-colfax-regular max-w-xs"
-                >
-                  Birthday parties, anniversaries, and milestone celebrations in our exclusive rooftop setting.
-                </motion.p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              className="flex flex-col items-center justify-center text-center space-y-6 px-4"
-            >
-              <div className="space-y-4 flex flex-col items-center justify-center h-full">
-                <motion.h3
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-                  className="text-2xl font-bold text-white tracking-wide"
-                >
-                  Special Events
-                </motion.h3>
-                <motion.p
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                  className="text-white/90 leading-relaxed font-colfax-regular max-w-xs"
-                >
-                  Themed dinners, wine tastings, and exclusive culinary experiences with our chef.
-                </motion.p>
-              </div>
-            </motion.div>
+            {displayEventTypes.map((eventType, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 + (index * 0.1), ease: "easeOut" }}
+                className="flex flex-col items-center justify-center text-center space-y-6 px-4"
+              >
+                <div className="space-y-4 flex flex-col items-center justify-center h-full">
+                  <motion.h3
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 + (index * 0.1), ease: "easeOut" }}
+                    className="text-2xl font-bold text-white tracking-wide"
+                  >
+                    {eventType.title}
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    className="text-white/90 leading-relaxed font-colfax-regular max-w-xs"
+                  >
+                    {eventType.description}
+                  </motion.p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

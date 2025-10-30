@@ -48,4 +48,16 @@ export default defineType({
       ],
     }),
   ],
+  preview: {
+    select: {
+      monaTitle: 'monaExperience.title',
+      rhythmTitle: 'rhythmOfMona.title',
+    },
+    prepare({ monaTitle, rhythmTitle }) {
+      return {
+        title: 'Home Page',
+        subtitle: `${monaTitle || 'Mona Experience'} • ${rhythmTitle || 'Rhythm of Mona'}`,
+      }
+    },
+  },
 })

@@ -6,6 +6,13 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'logo',
+      title: 'Mona Verde Logo',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'The main Mona Verde logo displayed in the hero section',
+    }),
+    defineField({
       name: 'images',
       title: 'Hero Images',
       type: 'array',
@@ -19,4 +26,17 @@ export default defineType({
       initialValue: 'CELEBRATE · CONNECT · EXPERIENCE',
     }),
   ],
+  preview: {
+    select: {
+      tagline: 'tagline',
+      media: 'logo',
+    },
+    prepare({ tagline, media }) {
+      return {
+        title: 'Hero Section',
+        subtitle: tagline || 'CELEBRATE · CONNECT · EXPERIENCE',
+        media: media,
+      }
+    },
+  },
 })

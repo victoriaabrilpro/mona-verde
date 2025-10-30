@@ -26,6 +26,7 @@ export interface Partner {
 export interface HeroSection {
   _id: string
   _type: 'heroSection'
+  logo?: SanityImage
   images: SanityImage[]
   tagline: string
 }
@@ -34,6 +35,8 @@ export interface HeroSection {
 export interface ContactInfo {
   _id: string
   _type: 'contactInfo'
+  logo?: SanityImage
+  description?: string
   phone?: string
   bookingEmail?: string
   eventsEmail?: string
@@ -124,6 +127,26 @@ export interface CareersPage {
   linkedInUrl?: string
   mainImage?: SanityImage
   benefits?: Array<{
+    title: string
+    description: string
+  }>
+}
+
+// Reservation Page
+export interface ReservationPage {
+  _id: string
+  _type: 'reservationPage'
+  bookingSection?: {
+    title: string
+    paragraphs: string[]
+    image?: SanityImage
+  }
+  eventsSection?: {
+    title: string
+    paragraphs: string[]
+    image?: SanityImage
+  }
+  eventTypes?: Array<{
     title: string
     description: string
   }>

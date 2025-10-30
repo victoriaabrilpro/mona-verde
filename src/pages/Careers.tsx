@@ -51,8 +51,8 @@ const Careers: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
               >
-                {careersData?.title ? careersData.title.split(' ').slice(0, 2).join(' ') : "JOIN THE MONA"}<br />
-                {careersData?.title ? careersData.title.split(' ').slice(2).join(' ') : "EXPERIENCE"}
+                {careersData?.title ? careersData.title.split(' ').slice(0, 3).join(' ') : "JOIN THE MONA"}<br />
+                {careersData?.title ? careersData.title.split(' ').slice(3).join(' ') : "EXPERIENCE"}
               </motion.h2>
               <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6 font-colfax-regular">
                 {careersData?.paragraphs && careersData.paragraphs.length > 0 ? (

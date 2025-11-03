@@ -152,101 +152,101 @@ const Reservation: React.FC = () => {
   </div>
 </section>
 
-      {/* Events Section */}
-      <section className="pt-8 pb-8 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative order-2 lg:order-1"
-            >
-              <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden">
-                <img
-                  src={eventsSection?.image ? urlFor(eventsSection.image).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczNim40CHz01du_o8nqahaVs_9XtuSZTtdzBYFoLSs9WyEwFD_lfcBKovTTsXL9y6FALqWLiPyP7TQHCQYuVelLrj3X0ImuCCxnMCFIpnBFYWc9A5fSTVTe4nuSV6-c_VQddDEBhwAZqaI5CpADn9q34=w1338-h2008-s-no-gm?authuser=1"}
-                  alt="Private Events"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="space-y-8 order-1 lg:order-2"
-            >
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+        {/* Events Section */}
+        <section className="pt-8 pb-8 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                className="text-2xl md:text-3xl font-canela text-[#4E5A48] mb-8"
+                transition={{ duration: 0.6 }}
+                className="relative order-2 lg:order-1"
               >
-                {eventsSection?.title || 'EVENT AND PRIVATIZATION'}
-              </motion.h2>
-              <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6">
-                {eventsSection?.paragraphs && eventsSection.paragraphs.length > 0 ? (
-                  eventsSection.paragraphs.map((paragraph, index) => (
-                    <motion.p
-                      key={index}
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
-                    >
-                      {paragraph}
-                    </motion.p>
-                  ))
-                ) : (
-                  <>
-                    <motion.p
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                    >
-                      Planning something special? Our rooftop makes any occasion feel extraordinary: whether it's a corporate event, private party, or celebrating a big milestone.
-                    </motion.p>
-                    <motion.p
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                    >
-                      From small, intimate gatherings to big celebrations, our events team works with you to create exactly what you're dreaming of, with custom menus and service that's all about you.
-                    </motion.p>
-                  </>
-                )}
-              </div>
+                <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden">
+                  <img
+                    src={eventsSection?.image ? urlFor(eventsSection.image).width(600).url() : "https://lh3.googleusercontent.com/pw/AP1GczNim40CHz01du_o8nqahaVs_9XtuSZTtdzBYFoLSs9WyEwFD_lfcBKovTTsXL9y6FALqWLiPyP7TQHCQYuVelLrj3X0ImuCCxnMCFIpnBFYWc9A5fSTVTe4nuSV6-c_VQddDEBhwAZqaI5CpADn9q34=w1338-h2008-s-no-gm?authuser=1"}
+                    alt="Private Events"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </motion.div>
 
-              <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+                className="space-y-6 order-1 lg:order-2"
+              >
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-                  className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 text-[#4E5A48]/80"
+                  transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                  className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
                 >
-                  <Mail size={16} className="text-[#4E5A48] hidden sm:block" />
-                  <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0">
-                    <span className="text-sm sm:text-base">Events inquiries:</span>
-                    <a 
-                      href={`mailto:${contactData?.eventsEmail || 'events@monaexperience.com'}`}
-                      className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300 text-sm sm:text-base break-all sm:ml-1"
-                    >
-                      {contactData?.eventsEmail || 'events@monaexperience.com'}
-                    </a>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
+                  {eventsSection?.title || 'EVENT AND PRIVATIZATION'}
+                </motion.h2>
+                <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6">
+                  {eventsSection?.paragraphs && eventsSection.paragraphs.length > 0 ? (
+                    eventsSection.paragraphs.map((paragraph, index) => (
+                      <motion.p
+                        key={index}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                      >
+                        {paragraph}
+                      </motion.p>
+                    ))
+                  ) : (
+                    <>
+                      <motion.p
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                      >
+                        Planning something special? Our rooftop makes any occasion feel extraordinary: whether it's a corporate event, private party, or celebrating a big milestone.
+                      </motion.p>
+                      <motion.p
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                      >
+                        From small, intimate gatherings to big celebrations, our events team works with you to create exactly what you're dreaming of, with custom menus and service that's all about you.
+                      </motion.p>
+                    </>
+                  )}
+                </div>
+
+                <div className="space-y-4 mt-1 !mt-1">
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                    className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 text-[#4E5A48]/80"
+                  >
+                    <Mail size={16} className="text-[#4E5A48] hidden sm:block" />
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0">
+                      <span className="text-sm sm:text-base">Events inquiries:</span>
+                      <a 
+                        href={`mailto:${contactData?.eventsEmail || 'events@monaexperience.com'}`}
+                        className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300 text-sm sm:text-base break-all sm:ml-1"
+                      >
+                        {contactData?.eventsEmail || 'events@monaexperience.com'}
+                      </a>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Plan Your Event Section */}
       <section className="py-16 md:py-24 bg-[#4E5A48] relative overflow-hidden flex items-center min-h-[400px]" style={{ marginTop: '0.05cm' }}>

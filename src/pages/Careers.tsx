@@ -42,7 +42,7 @@ const Careers: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="space-y-8"
+              className="space-y-6"
             >
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -54,7 +54,7 @@ const Careers: React.FC = () => {
                 {careersData?.title ? careersData.title.split(' ').slice(0, 3).join(' ') : "JOIN THE MONA"}<br />
                 {careersData?.title ? careersData.title.split(' ').slice(3).join(' ') : "EXPERIENCE"}
               </motion.h2>
-              <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-6 font-colfax-regular">
+              <div className="text-[#4E5A48]/80 text-lg leading-relaxed space-y-4 font-colfax-regular">
                 {careersData?.paragraphs && careersData.paragraphs.length > 0 ? (
                   careersData.paragraphs.slice(0, 2).map((paragraph, index) => (
                     <motion.p
@@ -89,37 +89,38 @@ const Careers: React.FC = () => {
                 )}
               </div>
 
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-                className="text-[#4E5A48]/80 text-lg leading-relaxed font-colfax-regular"
+                className="flex flex-wrap items-center gap-1 text-[#4E5A48]/80 text-lg leading-relaxed font-colfax-regular"
               >
-                Send your resume to{' '}
+                <span>Send</span>
+                <span>your</span>
+                <span>resume</span>
+                <span>to</span>
                 <a 
                   href={`mailto:${careersData?.jobsEmail || contactData?.jobsEmail || 'jobs@monaexperience.com'}`}
                   className="text-[#4E5A48] hover:text-[#4E5A48]/80 transition-colors duration-300"
                 >
                   {careersData?.jobsEmail || contactData?.jobsEmail || 'jobs@monaexperience.com'}
                 </a>
-              </motion.p>
+              </motion.div>
 
-              <div className="space-y-4">
-                <motion.a
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-                  href={careersData?.linkedInUrl || "https://pt.linkedin.com/company/monaexperience"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 text-[#4E5A48] uppercase tracking-wider font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 group"
-                >
-                  <span>View Open Positions</span>
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-                </motion.a>
-              </div>
+              <motion.a
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                href={careersData?.linkedInUrl || "https://pt.linkedin.com/company/monaexperience"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-2 text-[#4E5A48] uppercase tracking-wider font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 group"
+              >
+                <span>View Open Positions</span>
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+              </motion.a>
             </motion.div>
 
             <motion.div

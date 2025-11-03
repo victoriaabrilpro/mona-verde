@@ -11,16 +11,24 @@ import privacyPolicy from './privacyPolicy'
 import termsOfService from './termsOfService'
 
 export const schemaTypes = [
-  
   heroSection,
-  contactInfo,
-  eventsPage, // Changed from 'event' to 'eventsPage'
+  homePage,
   aboutPage,
   cuisinePage,
-  homePage,
-  careersPage,
   reservationPage,
+  eventsPage,
+  careersPage,
   partnersSection,
   privacyPolicy,
-  termsOfService
+  termsOfService,
+  contactInfo,
+  // Changed from 'event' to 'eventsPage'
+  
+  
+  
+  
+  
+  
+  
+  
 ]

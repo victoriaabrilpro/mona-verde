@@ -196,99 +196,99 @@ const Home: React.FC = () => {
       </section>
 
       {/* Mona Experience Section */}
-      <section className="bg-white overflow-hidden">
-        <div className="max-w-6xl mx-auto px-0 lg:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-24 lg:gap-24">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+<section className="bg-white overflow-hidden">
+  <div className="max-w-6xl mx-auto px-0 lg:px-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-24 lg:gap-24">
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+        className="space-y-6 md:space-y-12 flex flex-col justify-center py-6 lg:py-24 px-6 lg:pr-6 order-1 lg:order-1"
+      >
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
+        >
+          {homeData?.monaExperience?.title || 'MONA EXPERIENCE'}<br />
+          {homeData?.monaExperience?.subtitle || 'LISBON'}
+        </motion.h2>
+        <div className="space-y-4 md:space-y-8">
+          {homeData?.monaExperience?.paragraphs?.map((paragraph, index) => (
+            <motion.p
+              key={index}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-              className="space-y-6 md:space-y-12 flex flex-col justify-center py-6 lg:py-24 px-6 lg:pr-6 lg:px-0 order-1 lg:order-1"
+              transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+              className="text-black text-base md:text-lg leading-relaxed font-colfax-regular"
             >
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
-              >
-                {homeData?.monaExperience?.title || 'MONA EXPERIENCE'}<br />
-                {homeData?.monaExperience?.subtitle || 'LISBON'}
-              </motion.h2>
-              <div className="space-y-4 md:space-y-8">
-                {homeData?.monaExperience?.paragraphs?.map((paragraph, index) => (
-                  <motion.p
-                    key={index}
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
-                    className="text-black text-base md:text-lg leading-relaxed font-colfax-regular"
-                  >
-                    {paragraph}
-                  </motion.p>
-                ))}
-                {homeData?.monaExperience?.tagline && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-                    className="text-[#4E5A48] text-lg font-colfax-medium tracking-widest uppercase"
-                  >
-                    {homeData.monaExperience.tagline}
-                  </motion.div>
-                )}
-              </div>
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-              >
-                <Link
-                  to="/about"
-                  className="inline-block text-[#4E5A48] uppercase tracking-widest font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 flex items-center space-x-2 group"
-                >
-                  <span>Discover Our Story</span>
-                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-                </Link>
-              </motion.div>
+              {paragraph}
+            </motion.p>
+          ))}
+          {homeData?.monaExperience?.tagline && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+              className="text-[#4E5A48] text-lg font-colfax-medium tracking-widest uppercase"
+            >
+              {homeData.monaExperience.tagline}
             </motion.div>
+          )}
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+        >
+          <Link
+            to="/about"
+            className="inline-block text-[#4E5A48] uppercase tracking-widest font-colfax-regular hover:text-[#4E5A48]/80 transition-colors duration-300 flex items-center space-x-2 group"
+          >
+            <span>Discover Our Story</span>
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+          </Link>
+        </motion.div>
+      </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-              className="relative -mx-6 lg:mx-0 w-screen lg:w-full overflow-hidden order-2 lg:order-2"
-            >
-              <div className="w-screen lg:w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-0 relative left-1/2 transform -translate-x-1/2 lg:left-0 lg:transform-none overflow-hidden">
-                <div className="relative w-full h-full" style={{ aspectRatio: '3/4' }}>
-                  {homeData?.monaExperience?.images?.map((image, index) => (
-                    <motion.img
-                      key={index}
-                      src={urlFor(image).width(800).url()}
-                      alt={`Mona Experience ${index + 1}`}
-                      className="w-full h-full object-cover absolute inset-0"
-                      initial={{ opacity: 0 }}
-                      animate={{ 
-                        opacity: index === monaExperienceIndex ? 1 : 0,
-                        scale: index === monaExperienceIndex ? 1 : 1.05
-                      }}
-                      transition={{ 
-                        duration: 1,
-                        ease: "easeInOut"
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+        className="relative w-full overflow-hidden order-2 lg:order-2"
+      >
+        <div className="w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-0 relative overflow-hidden">
+          <div className="relative w-full h-full" style={{ aspectRatio: '3/4' }}>
+            {homeData?.monaExperience?.images?.map((image, index) => (
+              <motion.img
+                key={index}
+                src={urlFor(image).width(800).url()}
+                alt={`Mona Experience ${index + 1}`}
+                className="w-full h-full object-cover absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ 
+                  opacity: index === monaExperienceIndex ? 1 : 0,
+                  scale: index === monaExperienceIndex ? 1 : 1.05
+                }}
+                transition={{ 
+                  duration: 1,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
           </div>
         </div>
-      </section>
+      </motion.div>
+    </div>
+  </div>
+</section>
 
       {/* Rhythm of Mona Section */}
       <section className="bg-[#4E5A48] relative overflow-hidden">

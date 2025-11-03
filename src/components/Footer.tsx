@@ -48,85 +48,92 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-white text-[#4E5A48]">
       {/* Partners Section */}
-      <section className="py-6 bg-white">
-        <div className="w-full">
+<section className="py-6 bg-white">
+  <div className="w-full">
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+      className="w-full"
+    >
+      {/* Desktop version - static */}
+      <div className="hidden md:flex items-center justify-center gap-8 max-w-6xl mx-auto px-6">
+        {partners.map((partner, index) => (
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-            className="w-full"
+            transition={{ duration: 0.6, delay: 0.05 * index, ease: "easeOut" }}
+            key={partner._key || index}
+            className="flex-shrink-0 flex items-center justify-center w-32 h-16"
+            style={{ 
+              minWidth: '128px', 
+              height: '64px'
+            }}
           >
-            {/* Desktop version - static */}
-            <div className="hidden md:flex items-center justify-center gap-8 max-w-6xl mx-auto px-6">
-              {partners.map((partner, index) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.05 * index, ease: "easeOut" }}
-                  key={partner._key || index}
-                  className="flex-shrink-0 flex items-center justify-center w-32 h-16"
-                  style={{ 
-                    minWidth: '128px', 
-                    height: '64px'
-                  }}
-                >
-                  <img
-                    src={urlFor(partner.logo).width(300).url()}
-                    alt={partner.name}
-                    className="w-full h-full object-contain opacity-60"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
-                  />
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Mobile version - auto-scrolling */}
-            <div className="md:hidden overflow-hidden">
-              <div className="flex items-center gap-8 animate-scroll">
-                {/* First set of logos */}
-                {partners.map((partner, index) => (
-                  <div
-                    key={`first-${partner._key || index}`}
-                    className="flex-shrink-0 flex items-center justify-center w-32 h-16"
-                    style={{ 
-                      minWidth: '128px', 
-                      height: '64px'
-                    }}
-                  >
-                    <img
-                      src={urlFor(partner.logo).width(300).url()}
-                      alt={partner.name}
-                      className="w-full h-full object-contain opacity-60"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
-                    />
-                  </div>
-                ))}
-                {/* Duplicate set for seamless loop */}
-                {partners.map((partner, index) => (
-                  <div
-                    key={`second-${partner._key || index}`}
-                    className="flex-shrink-0 flex items-center justify-center w-32 h-16"
-                    style={{ 
-                      minWidth: '128px', 
-                      height: '64px'
-                    }}
-                  >
-                    <img
-                      src={urlFor(partner.logo).width(300).url()}
-                      alt={partner.name}
-                      className="w-full h-full object-contain opacity-60"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <img
+              src={urlFor(partner.logo).width(300).url()}
+              alt={partner.name}
+              className="w-full h-full object-contain opacity-60"
+              style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
+            />
           </motion.div>
+        ))}
+      </div>
+      
+      {/* Mobile version - auto-scrolling */}
+      <div className="md:hidden overflow-hidden">
+        {/* FIX 1: Removed 'gap-8' from this line.
+          It's now just 'flex items-center animate-scroll'
+        */}
+        <div className="flex items-center animate-scroll">
+          {/* First set of logos */}
+          {partners.map((partner, index) => (
+            <div
+              key={`first-${partner._key || index}`}
+              /* FIX 2: Added 'mr-8' (margin-right-8) here 
+                to create the space between logos.
+              */
+              className="flex-shrink-0 flex items-center justify-center w-32 h-16 mr-8"
+              style={{ 
+                minWidth: '128px', 
+                height: '64px'
+              }}
+            >
+              <img
+                src={urlFor(partner.logo).width(300).url()}
+                alt={partner.name}
+                className="w-full h-full object-contain opacity-60"
+                style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
+              />
+            </div>
+          ))}
+          {/* Duplicate set for seamless loop */}
+          {partners.map((partner, index) => (
+            <div
+              key={`second-${partner._key || index}`}
+              /* FIX 3: Also added 'mr-8' here for the second set.
+              */
+              className="flex-shrink-0 flex items-center justify-center w-32 h-16 mr-8"
+              style={{ 
+                minWidth: '128px', 
+                height: '64px'
+              }}
+            >
+              <img
+                src={urlFor(partner.logo).width(300).url()}
+                alt={partner.name}
+                className="w-full h-full object-contain opacity-60"
+                style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(15%) saturate(1084%) hue-rotate(82deg) brightness(95%) contrast(89%)' }}
+              />
+            </div>
+          ))}
         </div>
-      </section>
-
+      </div>
+    </motion.div>
+  </div>
+</section>
       {/* Footer Content */}
       {/* Decorative Bar Above Footer */}
       <section className="h-6 bg-[#4E5A48] relative overflow-hidden">

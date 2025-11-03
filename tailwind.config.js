@@ -6,7 +6,7 @@ export default {
     extend: {
       animation: {
         // Set your desired speeds here
-        scroll: "scroll 15s linear infinite", // Default speed (mobile)
+        scroll: "scroll 25s linear infinite", // Default speed (mobile)
         'scroll-md': "scroll 40s linear infinite", // Optional desktop speed
       },
       keyframes: {

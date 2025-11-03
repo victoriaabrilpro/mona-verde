@@ -99,7 +99,7 @@ const Reservation: React.FC = () => {
           )}
         </div>
 
-        <div className="space-y-4 mb-4">
+        <div className="space-y-6 mb-4">
           <motion.button
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -155,13 +155,13 @@ const Reservation: React.FC = () => {
         {/* Events Section */}
         <section className="pt-8 pb-8 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="relative order-2 lg:order-1"
+                className="relative order-2 lg:order-1 mt-8 lg:mt-0"
               >
                 <div className="aspect-[4/5] bg-[#4E5A48]/20 overflow-hidden">
                   <img
@@ -177,14 +177,14 @@ const Reservation: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                className="space-y-6 order-1 lg:order-2"
+                className="space-y-8 order-1 lg:order-2"
               >
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                  className="text-2xl md:text-3xl font-canela text-[#4E5A48]"
+                  className="text-2xl md:text-3xl font-canela text-[#4E5A48] mb-8"
                 >
                   {eventsSection?.title || 'EVENT AND PRIVATIZATION'}
                 </motion.h2>
@@ -223,7 +223,7 @@ const Reservation: React.FC = () => {
                   )}
                 </div>
 
-                <div className="space-y-4 mt-1 !mt-1">
+                <div className="space-y-4 mb-4">
                   <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}

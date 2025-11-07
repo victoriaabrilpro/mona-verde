@@ -126,7 +126,7 @@ const Cuisine: React.FC = () => {
                     href={menuLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 border-2 border-white text-white px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm uppercase tracking-[0.15em] font-colfax-medium hover:bg-white hover:text-[#4E5A48] transition-all duration-300 group mt-32"
+                    className="inline-flex items-center space-x-2 border-2 border-white text-white px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm uppercase tracking-[0.15em] font-colfax-medium hover:bg-white hover:text-[#4E5A48] transition-all duration-300 group mt-24"
                   >
                     <span>Explore Menu</span>
                     <ExternalLink size={10} className="md:size-3 group-hover:translate-x-1 transition-transform duration-300" />

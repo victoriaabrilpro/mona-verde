@@ -451,7 +451,7 @@ const Footer: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
               className="text-[#4E5A48]/60 text-sm font-colfax-regular text-center sm:text-right"
             >
-              © 2025 Mona Verde. All rights reserved.
+              © 2026 Mona Verde. All rights reserved.
             </motion.p>
           </div>
         </motion.div>
